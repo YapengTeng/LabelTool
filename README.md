@@ -11,7 +11,7 @@ The following is an introduction to some shortcut keys to help quickly mark keyp
 - **Left  Click**                  : add keypoint
 - **Right Click** (or `delete` key): remove keypoint
 
-About **file**:
+About **File**:
 - **a**: next file
 - **s**: previous file
 - **d**: skip 10 files
@@ -22,7 +22,7 @@ About **file**:
 - **c**: reuse the previous 10  label info to label from previous 10 files to current file
 - **v**: reuse the previous 100 label info to label from previous 10 files to current file
 
-About **keypoints**:
+About **Keypoints**:
 - **z**: undo
 - **n**: the next     category
 - **p**: the previous category
