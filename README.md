@@ -26,7 +26,6 @@ About **Keypoints**:
 - **z**: undo
 - **n**: the next     category
 - **p**: the previous category
-
 - **q**: quit
 
 I know what the saying of my math teacher kevin means, "I am so proud what we learn together through the semester, but with review, it seems we learn very little :)".
