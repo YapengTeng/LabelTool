@@ -8,25 +8,25 @@ Please the first thing is to replace `image_directory` in `piplinev2.py` with yo
 
 The following is an introduction to some shortcut keys to help quickly mark keypoints:
 
-- Left  Click                  : add keypoint
-- Right Click (or `delete` key): remove keypoint
+- **Left  Click**                  : add keypoint
+- **Right Click** (or `delete` key): remove keypoint
 
-About file:
-- a: next file
-- s: previous file
-- d: skip 10 files
-- f: previous 10 files
-- g: skip 100 files
-- h: previous 100 files
-- x: reuse the previous 1   label info to label                           current file
-- c: reuse the previous 10  label info to label from previous 10 files to current file
-- v: reuse the previous 100 label info to label from previous 10 files to current file
+About **file**:
+- **a**: next file
+- **s**: previous file
+- **d**: skip 10 files
+- **f**: previous 10 files
+- **g**: skip 100 files
+- **h**: previous 100 files
+- **x**: reuse the previous 1   label info to label                           current file
+- **c**: reuse the previous 10  label info to label from previous 10 files to current file
+- **v**: reuse the previous 100 label info to label from previous 10 files to current file
 
-About keypoints:
-- z: undo
-- n: the next     category
-- p: the previous category
+About **keypoints**:
+- **z**: undo
+- **n**: the next     category
+- **p**: the previous category
 
-- q: quit
+- **q**: quit
 
 I know what the saying of my math teacher kevin means, "I am so proud what we learn together through the semester, but with review, it seems we learn very little :)".
