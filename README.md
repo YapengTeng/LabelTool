@@ -4,7 +4,7 @@ This is a labeling task for large number of images, mainly for exsiting a large 
 
 Right now, this code can just be used for labeling keypoints. And the final data format in json is Labelme format, so you can also use Labelme for visualization.
 
-Please the first thing is to replace `image_directory` with your file directory
+Please the first thing is to replace `image_directory` in `piplinev2.py` with your file directory, then run `piplinev2.py`.
 
 The following is an introduction to some shortcut keys to help quickly mark keypoints:
 
