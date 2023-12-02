@@ -10,7 +10,9 @@ The requirement:
 - opencv-contrib-python
 - pyautogui
 
-you can just pip install the libs above or pip install -r requirements.txt.
+you can just pip install the libs above,
+or `pip install -r requirements.txt`,
+or you can use `conda env create -f environment.yml`
 
 The following is an introduction to some shortcut keys to help quickly mark keypoints:
 
