@@ -6,6 +6,12 @@ Right now, this code can just be used for labeling keypoints. And the final data
 
 Please the first thing is to replace `image_directory` in `piplinev2.py` with your file directory, then run `piplinev2.py`.
 
+The requirement:
+- opencv-contrib-python
+- pyautogui
+
+you can just pip install the libs above or pip install -r requirements.txt.
+
 The following is an introduction to some shortcut keys to help quickly mark keypoints:
 
 - **Left  Click**                  : add keypoint
