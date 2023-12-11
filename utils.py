@@ -101,15 +101,26 @@ def coco_to_keypoints(coco_annotations):
     return keypoints
 
 
-def labelmeFormat(imageHeight,imageWidth,imagePath):
+# def labelmeFormat(imageHeight,imageWidth,imagePath):
+#     data = {
+#         "version": "5.2.1",
+#         "flags": {},
+#         "shapes": [],
+#         "imagePath": imagePath,
+#         "imageData": None,
+#         "imageHeight": imageHeight,
+#         "imageWidth": imageWidth
+#     }
+#     return data
+
+def labelmeFormat(pickle_path, total_number, category, imageHeight, imageWidth):
     data = {
-        "version": "5.2.1",
-        "flags": {},
-        "shapes": [],
-        "imagePath": imagePath,
-        "imageData": None,
+        "pickle_path": pickle_path,
+        "total_number": total_number,
+        "keypoints": {
+            category: {},
+        },
         "imageHeight": imageHeight,
         "imageWidth": imageWidth
     }
     return data
-
