@@ -97,7 +97,7 @@ class ImageNav:
                 self.current_image_index = 0
 
                 self.get_image_list()
-                img = self.image_list[0]
+                img = self.image_list[0][1]
                 mage_height, image_width = img.shape[0], img.shape[1]
                 self.current_json_path = self.get_json_path(
                     self.pickle_list[self.current_pickle_index])
@@ -180,7 +180,7 @@ class ImageNav:
         )
 
         with open(self.current_json_path, "w") as json_file:
-            json.dump(labelme_format, json_file, indent=2)
+            json.dump(labelme_format, json_file, indent=None)
 
         self.current_json_data = labelme_format
 
@@ -207,7 +207,7 @@ class ImageNav:
             self.last_image_index = self.current_image_index
 
             with open(self.current_json_path, "w") as json_file:
-                json.dump(self.current_json_data, json_file, indent=2)
+                json.dump(self.current_json_data, json_file, indent=None)
             print("Save successfully!")
 
     def load_image(self, index=1):

@@ -60,7 +60,7 @@ class KeyPointAnnotator:
             # 在图像上显示当前关键点类别
             cv2.putText(
                 image_copy,
-                f"{self.image_nav.label[self.current_category_index]}, {self.image_nav.get_current_index()+1}/{len(self.image_nav.image_list)}",
+                f"{self.image_nav.label[self.current_category_index]}, {self.image_nav.get_current_index()+1}/{len(self.image_nav.image_list)}, {self.image_nav.current_pickle_index+1}/{len(self.image_nav.pickle_list)}",
                 (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
             cv2.imshow("Image", image_copy)
@@ -82,7 +82,7 @@ class KeyPointAnnotator:
                                                1) % len(self.image_nav.label)
 
             # next image
-            elif key == ord("a"):
+            elif key == ord("s"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
@@ -90,7 +90,7 @@ class KeyPointAnnotator:
                 self.keypoints = self.image_nav.load_keypoints_interface(1)
 
             # previous image
-            elif key == ord("s"):
+            elif key == ord("a"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
@@ -98,7 +98,7 @@ class KeyPointAnnotator:
                 self.keypoints = self.image_nav.load_keypoints_interface(-1)
 
             # next 10 image
-            elif key == ord("d"):
+            elif key == ord("f"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
@@ -106,7 +106,7 @@ class KeyPointAnnotator:
                 self.keypoints =self.image_nav.load_keypoints_interface(10)
 
             # previous 10 image
-            elif key == ord("f"):
+            elif key == ord("d"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
@@ -114,7 +114,7 @@ class KeyPointAnnotator:
                 self.keypoints =self.image_nav.load_keypoints_interface(-10)
 
             # next 100 image
-            elif key == ord("g"):
+            elif key == ord("h"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
@@ -122,7 +122,7 @@ class KeyPointAnnotator:
                 self.keypoints =self.image_nav.load_keypoints_interface(100)
 
             # previous 100 image
-            elif key == ord("h"):
+            elif key == ord("g"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
@@ -136,13 +136,13 @@ class KeyPointAnnotator:
                     self.keypoints = temp
                 
 
-            elif key == ord("c"):
+            elif key == ord("v"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
                 self.image_nav.load_pickle_interface(1)
 
-            elif key == ord("v"):
+            elif key == ord("c"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
                                                       self.image_id)
