@@ -41,5 +41,8 @@ About **Keypoints labels**:
 
 pls remember when you finish the last image, you need to push **c** or **v** to change pickle file. It is not automatically :).
 
+TODO：
+1. cloud platform. work togerther
+2. average everyone's results
 
 
