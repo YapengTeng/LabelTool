@@ -42,7 +42,7 @@ About **Keypoints labels**:
 pls remember when you finish the last image, you need to push **c** or **v** to change pickle file. It is not automatically :).
 
 **UPDATA**：
-Add ``interpolation`` function, which is automatical: If you skips images, and then label the current images, it will do interpolations between responding keypoints automatically. For example, just finish the 10-th image, containing 5 categories, and skip 10 images to the 20-th image. If you directly label it, it will do interpolations from the 10-th image to 20-th image.
+Add ``interpolation`` function, which is automatical: If you skips images, and then label the current images, it will do interpolations between responding keypoints automatically. For example, just finish the 10-th image, containing 5 categories, and skip 10 images to the 20-th image. If you directly label it, it will do interpolations from the 10-th image to 20-th image. Note that if the ``x`` coordinate can be same within two keypoints (i.e. they are parallel), it will sample uniformly points.
 
 TODO：
 1. cloud platform. work togerther
