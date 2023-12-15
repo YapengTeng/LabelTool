@@ -8,10 +8,11 @@ import json
 
 class KeyPointAnnotator:
 
-    def __init__(self, folder_path, category, label):
+    def __init__(self, folder_path, category, label, method='linear'):
         self.image_nav = ImageNav.ImageNav(folder_path, category, label)
         self.image_id, self.image = self.image_nav.load_image(
             self.image_nav.current_image_index)
+        self.method = method
 
         self.keypoints = self.image_nav.load_keypoints_from_json()
         self.current_category_index = 0
@@ -86,7 +87,7 @@ class KeyPointAnnotator:
             elif key == ord("s"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_image_interface(1)
                 self.keypoints = self.image_nav.load_keypoints_interface(1)
 
@@ -94,7 +95,7 @@ class KeyPointAnnotator:
             elif key == ord("a"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_image_interface(-1)
                 self.keypoints = self.image_nav.load_keypoints_interface(-1)
 
@@ -102,7 +103,7 @@ class KeyPointAnnotator:
             elif key == ord("f"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_image_interface(10)
                 self.keypoints =self.image_nav.load_keypoints_interface(10)
 
@@ -110,7 +111,7 @@ class KeyPointAnnotator:
             elif key == ord("d"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_image_interface(-10)
                 self.keypoints =self.image_nav.load_keypoints_interface(-10)
 
@@ -118,7 +119,7 @@ class KeyPointAnnotator:
             elif key == ord("h"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_image_interface(100)
                 self.keypoints =self.image_nav.load_keypoints_interface(100)
 
@@ -126,7 +127,7 @@ class KeyPointAnnotator:
             elif key == ord("g"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_image_interface(-100)
                 self.keypoints =self.image_nav.load_keypoints_interface(-100)
 
@@ -140,13 +141,13 @@ class KeyPointAnnotator:
             elif key == ord("v"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_pickle_interface(1)
 
             elif key == ord("c"):
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id,self.method)
                 self.image_nav.load_pickle_interface(-1)
 
             # elif key == ord('y'):
@@ -171,7 +172,7 @@ class KeyPointAnnotator:
             #  'q': quit
             elif key == ord("q"):
                 self.image_nav.save_keypoints_to_json(
-                    self.keypoints, self.image_id)    # 退出时保存标注信息
+                    self.keypoints, self.image_id,self.method)    # 退出时保存标注信息
                 break
 
         cv2.destroyAllWindows()
@@ -185,7 +186,7 @@ class KeyPointAnnotator:
                                            1)/len(self.image_nav.label)>=1:
                 self.current_category_index = 0
                 self.image_nav.save_keypoints_to_json(self.keypoints,
-                                                      self.image_id)
+                                                      self.image_id, self.method)
                 self.image_nav.load_image_interface(1)
                 self.keypoints = self.image_nav.load_keypoints_interface(1)
                 
@@ -238,5 +239,7 @@ if __name__ == "__main__":
     # replace with pickle folder
     pck_folder = r"D:\Desktop\Cornell\2023 Fall\EmPRISE lab\dataset\rgb"
 
-    annotator = KeyPointAnnotator(pck_folder, category, keypoint_categories)
+    method = 'linear'
+
+    annotator = KeyPointAnnotator(pck_folder, category, keypoint_categories, method)
     annotator.annotate_image()

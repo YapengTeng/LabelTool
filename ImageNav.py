@@ -234,20 +234,19 @@ class ImageNav:
                     last_y    = point_info['points'][1]
                     current_x, current_y = keypoints[point_info['label']]
 
-                    # try:
+                    if last_x!=current_x:
                 
-                    #     f = interp1d([last_x, current_x], [last_y, current_y], kind=method)
-                    #     xi = np.linspace(last_x, current_x, self.current_image_index-self.last_image_index-1)
-                    #     yi = f(xi)
-                    # except:
+                        f = interp1d([last_x, current_x], [last_y, current_y], kind=method)
+                        xi = np.linspace(last_x, current_x, self.current_image_index-self.last_image_index+1)
+                        yi = f(xi)
+                    else:
                         
-                    
-                    xi = np.linspace(last_x, current_x, self.current_image_index-self.last_image_index+1)
-                    yi = np.linspace(last_y, current_y, self.current_image_index-self.last_image_index+1)
+                        xi = np.linspace(last_x, current_x, self.current_image_index-self.last_image_index+1)
+                        yi = np.linspace(last_y, current_y, self.current_image_index-self.last_image_index+1)
                     
                     for i in range(1,len(xi)):
                         revised_info = {
-                        "label": point_info['label'],"points":[(xi[i]),(yi[i])],"shape_type": "point",}
+                        "label": point_info['label'],"points":[int(xi[i]),int(yi[i])],"shape_type": "point",}
                         try:
                             self.current_json_data["keypoints"][self.category][self.image_list[self.last_image_index+i][0]].append(revised_info)
                         except:
