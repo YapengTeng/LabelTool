@@ -52,6 +52,7 @@ class KeyPointAnnotator:
             # cv2.resizeWindow("Image", 2*image_copy.shape[0], 2*image_copy.shape[1])
 
             # 在图像上绘制已经标注的关键点
+            
             for category, point in self.keypoints.items():
                 x, y = point
                 color = self.colors[self.image_nav.label.index(category)]

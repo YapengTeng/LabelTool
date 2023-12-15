@@ -4,6 +4,8 @@ from collections import deque
 import utils
 import cv2
 import pickle
+import numpy as np
+from scipy.interpolate import interp1d
 
 
 class ImageNav:
@@ -180,7 +182,7 @@ class ImageNav:
         )
 
         with open(self.current_json_path, "w") as json_file:
-            json.dump(labelme_format, json_file, indent=None)
+            json.dump(labelme_format, json_file, indent=2)
 
         self.current_json_data = labelme_format
 
@@ -188,27 +190,81 @@ class ImageNav:
         self,
         keypoints,
         image_id,
+        method = 'linear'
     ):
 
-        item = []
+        # 4 cases: previous, next，reuse，interpolation
 
-        if len(keypoints) == len(self.label) and (self.current_image_index==(self.last_image_index+1)):
-            for label, point in keypoints.items():
-                # print(f"Category: {label}, Coordinates: {point[0]}, {point[1]}")
-                revised_info = {
-                    "label": label,"points": point[:2],"shape_type": "point",
-                }
 
-                # add new keypoints
-                item.append(revised_info)
+        if len(keypoints) == len(self.label):
+            # print(self.current_json_data["keypoints"][self.category][self.image_list[self.last_image_index][0]])
+            if self.current_image_index<=self.last_image_index+1:
+                item = []
+                for label, point in keypoints.items():
+                    # print(f"Category: {label}, Coordinates: {point[0]}, {point[1]}")
+                    revised_info = {
+                        "label": label,"points": point[:2],"shape_type": "point",
+                    }
+                    # add new keypoints
+                    item.append(revised_info)
+                
+                self.current_json_data["keypoints"][self.category][image_id]=item
+                if (self.current_image_index==(self.last_image_index+1)):
+
+                    self.last_image_index = self.current_image_index
+
+                with open(self.current_json_path, "w") as json_file:
+                    json.dump(self.current_json_data, json_file, indent=2)
+                print("Save successfully!")
+
+            elif self.image_list[self.last_image_index+1][0] in self.current_json_data["keypoints"][self.category]:
+                             
+                self.last_image_index = self.current_image_index
+
+                with open(self.current_json_path, "w") as json_file:
+                    json.dump(self.current_json_data, json_file, indent=2)
+                print("Save successfully!")
+            else:
+                
+                last_keypoints_json = list(self.current_json_data["keypoints"][self.category].values())[
+                            self.last_image_index]
+                
+                for point_info in last_keypoints_json:
+                    last_x    = point_info['points'][0]
+                    last_y    = point_info['points'][1]
+                    current_x, current_y = keypoints[point_info['label']]
+
+                    # try:
+                
+                    #     f = interp1d([last_x, current_x], [last_y, current_y], kind=method)
+                    #     xi = np.linspace(last_x, current_x, self.current_image_index-self.last_image_index-1)
+                    #     yi = f(xi)
+                    # except:
+                        
+                    
+                    xi = np.linspace(last_x, current_x, self.current_image_index-self.last_image_index+1)
+                    yi = np.linspace(last_y, current_y, self.current_image_index-self.last_image_index+1)
+                    
+                    for i in range(1,len(xi)):
+                        revised_info = {
+                        "label": point_info['label'],"points":[(xi[i]),(yi[i])],"shape_type": "point",}
+                        try:
+                            self.current_json_data["keypoints"][self.category][self.image_list[self.last_image_index+i][0]].append(revised_info)
+                        except:
+                            self.current_json_data["keypoints"][self.category][self.image_list[self.last_image_index+i][0]]=list()
+                            self.current_json_data["keypoints"][self.category][self.image_list[self.last_image_index+i][0]].append(revised_info)
+                
+                self.last_image_index = self.current_image_index
+
+                with open(self.current_json_path, "w") as json_file:
+                    json.dump(self.current_json_data, json_file, indent=2)
+
+        # else:
+        #     print("Because the number of all labeled keypoints don't equal to number of label. Saving failed.")
+                            
             
-            self.current_json_data["keypoints"][self.category][image_id]=item
-            
-            self.last_image_index = self.current_image_index
-
-            with open(self.current_json_path, "w") as json_file:
-                json.dump(self.current_json_data, json_file, indent=None)
-            print("Save successfully!")
+                
+        
 
     def load_image(self, index=1):
         '''
@@ -316,7 +372,7 @@ class ImageNav:
             for i in range(self.last_image_index+1, self.current_image_index+1):
                 self.current_json_data["keypoints"][self.category][self.image_list[i][0]] = item
 
-
+            
             keypoints = {}
             for point_info in item:
                 # print(point_info)
@@ -327,6 +383,23 @@ class ImageNav:
             
             return keypoints
         return None
+
+    def interpolation(self,src_points,dst_points):
+
+        # 假设有两组点
+        # src_points = np.array([[0, 0], [2, 4], [5, 2]], dtype=np.float32)
+        # dst_points = np.array([[0, 0], [6, 12], [15, 6]], dtype=np.float32)
+
+        # 设置插值的目标数据数量
+        num_interpolated_points = 10
+
+        # 使用cv2.resize()进行插值
+        interpolated_points = cv2.resize(src_points, (num_interpolated_points, 2), interpolation=cv2.INTER_LINEAR)
+
+        print("插值后的数据:")
+        print(interpolated_points)
+
+
 
 
     def load_image_interface(self, index):
