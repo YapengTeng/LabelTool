@@ -1,6 +1,6 @@
-![image](https://github.com/YapengTeng/LabelTool/assets/105402346/cada3805-3ac8-4c0e-b84d-497c44f1411a)![image](https://github.com/YapengTeng/LabelTool/assets/105402346/714d42cb-45fa-46e2-b8c1-5cb01860367e)# LabelTool
+# LabelTool
 
-Updates:
+## Updates!!
 
 # environment
 There are 3 ways for you guys to quickly set up.
