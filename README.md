@@ -26,6 +26,7 @@ Pls follow steps by steps to setup. Then you can directly label without need of 
 6. pls download POSTMAN chrome extension. What I use is PostWoman Http Test.
 7. ![click](https://github.com/YapengTeng/LabelTool/assets/105402346/ffb41cd9-5662-44f7-af52-39da9eb41e02)
 8. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/ed23cac5-0ec8-4211-9747-6692ebf7d607)
+https://app.box.com/api/oauth2/token
 
 grant_type: authorization_code
 client_id: Value in the configuration page.
