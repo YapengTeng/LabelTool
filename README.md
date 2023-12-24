@@ -1,12 +1,9 @@
-# LabelTool
+![image](https://github.com/YapengTeng/LabelTool/assets/105402346/714d42cb-45fa-46e2-b8c1-5cb01860367e)# LabelTool
 
-Hey, there are some updates.
+Updates:
 
-I simplify some new funtions so that we can effectively label for large data.
-
-The first thing to do is to replace the ``pck_folder`` in ``pipeline.py`` with your actually folder which stores the data. And then run it!
-
-The python virtual environment doesn't change. Also there are 3 ways for you guys to quickly set up.
+# environment
+There are 3 ways for you guys to quickly set up.
 
 you can just pip install the libs following respectively: 
 The requirement:
@@ -15,6 +12,13 @@ The requirement:
   
 or `pip install -r requirements.txt`,
 or you can use `conda env create -f environment.yml`
+
+# cloud
+Pls follow steps by steps to setup. Then you can directly label without need of downloading data from cloud.
+
+1. 
+
+
 
 The following is the instruction of shortcut keys:
 
