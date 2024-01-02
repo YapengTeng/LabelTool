@@ -51,11 +51,7 @@ The following is the instruction of shortcut keys:
 About **File**:
 - **a**: previous **image** file
 - **s**: next **image** file
-- **d**: previous 10 **image**
-- **f**: skip 10 **image**
-- **g**: previous 100 **image**
-- **h**: skip 100 **image**
-- 
+
 - **x**: reuse the lastest labeled keypoints info to label from it to the current image
   
 About **Keypoints labels**:
