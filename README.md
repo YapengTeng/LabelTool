@@ -2,6 +2,10 @@
 
 ## Updates!!
 
+Everytime before starting to do label job, you need to get the unique code. Pls replace the ``unique_code`` variable in ``pipelinev6.py`` with what you get. And then run it. In my code, I use the ''.\xxxx\xxx'' to represent relative path. If it failed in your pc, you can try ''xxxx\xxx''.
+
+You can use the environment token if you want to try, which is refreshed frequently. So if it fail, you can setup the environment according to the following **``cloud``** section.
+
 # environment
 There are 3 ways for you guys to quickly set up.
 
