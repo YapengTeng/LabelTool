@@ -1,0 +1,554 @@
+import os
+import json
+from collections import deque
+import utils
+import cv2
+import pickle
+import numpy as np
+from scipy.interpolate import interp1d
+import box_utils
+from boxsdk import Client, OAuth2
+import io
+import math
+import sys
+
+
+class ImageNav:
+    ''' 
+    json file need to record the index of the image which are not labeled.
+    json file need to record the total number of the image.
+    '''
+
+    def __init__(self,
+                 config_path,
+                 category,
+                 label,
+                 shared_link,
+                 res_link,
+                 unique_code,
+                 res_label_path=r'.\label',
+                 frame_rate=15):
+        #  unique_file="unique_code.json"):
+
+        self.category = category    # dummy
+        self.label = label    # [head,...,]
+        self.config_path = config_path
+        self.res_label_path = res_label_path
+        self.shared_link = shared_link
+        self.res_link = res_link
+        self.frame_rate = frame_rate
+        self.unique_code = unique_code
+
+        self.repeated_number = None
+
+        # right now set local file, we will upload to cloud and update it in real time
+        # self.unique_file = unique_file
+        self.res_item = None
+
+        self.client = None
+
+        self.all_pickles_files = {
+        }    # {box job item: rgb pickle} -> user needs to label
+
+        print(f"currently configure path: {config_path}")
+        self.configure()
+
+        self.current_file_index = 0
+
+        self.image_list = []
+
+        # need to care for setting value
+
+        self.current_image_index = 0
+        self.current_json_path = None
+        self.current_json_data = None
+
+        self.last_image_index = -1    # to record the number to the closest labeled img
+
+        # Initialize tha above parameters
+        os.makedirs(rf"{self.res_label_path}", exist_ok=True)
+        self.initialization()
+
+    def configure(self):
+
+        client_id, client_secret, access_token, refresh_token = box_utils.parsed(
+            config_file=self.config_path)
+
+        # Test token refresh
+        new_access_token, new_refresh_token = box_utils.authenticate(
+            client_id=client_id,
+            client_secret=client_secret,
+            access_token=access_token,
+            refresh_token=refresh_token)
+
+        # Manually update tokens
+
+        box_utils.update(access_token=new_access_token,
+                         refresh_token=new_refresh_token,
+                         config_file=self.config_path)
+
+        # Test authentication
+        auth = OAuth2(client_id=client_id,
+                      client_secret=client_secret,
+                      access_token=new_access_token,
+                      refresh_token=new_refresh_token,
+                      store_tokens=box_utils.update)
+
+        # Get user info
+        self.client = Client(auth)
+        user = self.client.user().get()
+        print("The current app user ID is {0}".format(user.id))
+
+        self.res_item = self.client.get_shared_item(self.res_link)
+        res_folder = self.client.folder(folder_id=self.res_item.id).get_items()
+
+        for x in res_folder:
+            if x.name == 'unique_code.json':
+                unique_file = x
+        unique_file = self.client.file(unique_file.id).content()
+        unique_file = io.BytesIO(unique_file)
+        unique_file = json.load(unique_file)
+
+        self.all_pickles_files = unique_file[self.unique_code]
+
+        self.repeated_number = self.all_pickles_files["repeat number"]
+        self.all_pickles_files = self.all_pickles_files['jobIdName_pklIdName']
+
+    def get_image_list2(self, id=None):
+        if id == None:
+            _, _, id, _ = self.all_pickles_files[self.current_file_index]
+
+        file_content = self.client.file(id).content()
+        file_content = io.BytesIO(file_content)
+        self.image_list = []
+        count = self.frame_rate - 1
+
+        while True:
+            try:
+                data = pickle.load(file_content)
+                count += 1
+                if count == self.frame_rate:
+                    self.image_list.append(data)
+                    count = 0
+            except FileNotFoundError:
+                print(f" '{id}' file doesn't find.")
+            except:
+                break
+
+
+# ---------------------------------------------------------------------------- #
+
+    def isJobComplete(self, index=None, initialize=True):
+
+        pkl_json_path = self.get_json_path(index)
+
+        if os.path.exists(pkl_json_path):
+            with open(pkl_json_path, "r") as json_file:
+                data = json.load(json_file)
+
+            total_number = data['total_number']
+            first_unlabeled_img_ind = len(data['keypoints'][self.category])
+
+            pickle_flag = (first_unlabeled_img_ind == total_number)
+
+            first_unlabeled_img_ind = 0 if pickle_flag else first_unlabeled_img_ind
+
+            if initialize:
+                self.current_json_data = data
+                self.current_json_path = pkl_json_path
+                self.current_image_index = first_unlabeled_img_ind
+                self.last_image_index = self.current_image_index - 1
+
+            return pickle_flag
+
+        if initialize:
+            self.current_json_path = pkl_json_path
+
+        return False
+
+    # def current_job_name(self, index=None):
+    #     if index == None:
+    #         index = self.current_file_index
+    #     return self.all_pickles_files[index]
+
+    # def current_pickle_name(self):
+    #     return list(self.all_pickles_files.values())[self.current_file_index][
+    #         self.current_pickle_index].name
+
+    # def current_pickle_id(self):
+    #     return list(self.all_pickles_files.values())[self.current_file_index][
+    #         self.current_pickle_index].id
+
+    # def current_pickle_path(self,):
+    #     return rf"{self.res_label_path}\{self.current_job_name()}\{self.current_pickle_name()}"
+
+    def get_json_path(self, index=None):
+        if index == None:
+            index = self.current_file_index
+        _, job_name, _, pkl_name = self.all_pickles_files[index]
+
+        file_name = os.path.splitext(os.path.basename(pkl_name))[0]
+
+        return os.path.join(self.res_label_path, job_name,
+                            f"{file_name}_{self.unique_code}.json")
+
+    def get_json_path_noP(self, index=None):
+        if index == None:
+            index = self.current_file_index
+        _, job_name, _, pkl_name = self.all_pickles_files[index]
+
+        file_name = os.path.splitext(os.path.basename(pkl_name))[0]
+        return f"{file_name}_{self.unique_code}.json"
+
+    # 初始化，本地和云端，来看标定到哪一个文件了
+    def initialization(self):
+        '''
+        comfirm the index according to the json file.
+        '''
+
+        for index in range(len(self.all_pickles_files)):
+
+            if not self.isJobComplete(index, True):
+                self.current_file_index = index
+                break
+
+            elif (index == len(self.all_pickles_files) - 1):
+                self.upload(True)
+
+        _, job_name, pkl_id, pkl_name = self.all_pickles_files[
+            self.current_file_index]
+        os.makedirs(rf"{self.res_label_path}\{job_name}", exist_ok=True)
+
+        print("current pickle :", pkl_name)
+
+        self.get_image_list2(pkl_id)
+
+        img = self.image_list[0][1]
+        image_height, image_width = img.shape[0], img.shape[1]
+        # self.current_json_path = self.get_json_path()
+        if not os.path.exists(self.current_json_path):
+            self.create_json_file(self.current_json_path, image_height,
+                                  image_width)
+
+    def create_json_file(
+        self,
+        pickle_path,
+        image_width,
+        image_height,
+    ):
+        '''
+        create json file to record keypoints and pickle info.
+        image info related to image width, height, index
+        '''
+
+        labelme_format = utils.labelmeFormat(
+            pickle_path,
+            len(self.image_list),
+            self.unique_code,
+            self.category,
+            image_height,
+            image_width,
+        )
+
+        with open(pickle_path, "w") as json_file:
+            json.dump(labelme_format, json_file, indent=2)
+
+        self.current_json_data = labelme_format
+
+    def save_keypoints_to_json(self,
+                               keypoints,
+                               image_id,
+                               method='linear',
+                               interpolation=False):
+
+        # 4 cases: previous, next，reuse，interpolation
+        if len(keypoints) > 0:
+            # previous and next cases
+            if self.current_image_index <= self.last_image_index + 1:
+                item = []
+                for label, point in keypoints.items():
+                    # print(f"Category: {label}, Coordinates: {point[0]}, {point[1]}")
+                    revised_info = {
+                        "label": label,
+                        "points": point[:2],
+                        "shape_type": "point",
+                    }
+                    # add new keypoints
+                    item.append(revised_info)
+
+                self.current_json_data["keypoints"][
+                    self.category][image_id] = item
+                if (self.current_image_index == (self.last_image_index + 1)):
+
+                    self.last_image_index = self.current_image_index
+
+                with open(self.current_json_path, "w") as json_file:
+                    json.dump(self.current_json_data, json_file, indent=2)
+
+            else:
+                if interpolation:
+                    last_keypoints_json = list(
+                        self.current_json_data["keypoints"][
+                            self.category].values())[self.last_image_index]
+
+                    for point_info in last_keypoints_json:
+                        last_x = point_info['points'][0]
+                        last_y = point_info['points'][1]
+                        current_x, current_y = keypoints[point_info['label']]
+
+                        if last_x != current_x:
+
+                            f = interp1d([last_x, current_x],
+                                         [last_y, current_y],
+                                         kind=method)
+                            xi = np.linspace(
+                                last_x, current_x, self.current_image_index -
+                                self.last_image_index + 1)
+                            yi = f(xi)
+                        else:
+
+                            xi = np.linspace(
+                                last_x, current_x, self.current_image_index -
+                                self.last_image_index + 1)
+                            yi = np.linspace(
+                                last_y, current_y, self.current_image_index -
+                                self.last_image_index + 1)
+
+                        for i in range(1, len(xi)):
+                            revised_info = {
+                                "label": point_info['label'],
+                                "points": [int(xi[i]), int(yi[i])],
+                                "shape_type": "point",
+                            }
+                            try:
+                                self.current_json_data["keypoints"][
+                                    self.category][self.image_list[
+                                        self.last_image_index +
+                                        i][0]].append(revised_info)
+                            except:
+                                self.current_json_data["keypoints"][
+                                    self.category][self.image_list[
+                                        self.last_image_index + i][0]] = list()
+                                self.current_json_data["keypoints"][
+                                    self.category][self.image_list[
+                                        self.last_image_index +
+                                        i][0]].append(revised_info)
+
+                    self.last_image_index = self.current_image_index
+
+                    with open(self.current_json_path, "w") as json_file:
+                        json.dump(self.current_json_data, json_file, indent=2)
+
+        # else:
+        #     print("Because the number of all labeled keypoints don't equal to number of label. Saving failed.")
+
+    def load_image(self, index=1):
+        '''
+        return image 
+        '''
+
+        if index < 0:
+            if self.load_job(self.current_file_index - 1):
+
+                self.load_image(len(self.image_list) + index)
+            else:
+                index = 0
+                print("cannot load the previous image!")
+        elif index >= len(self.image_list):
+            # only completing current pickle and have next pickle can skip to next pickle
+            tem = len(self.image_list) - 1
+            if self.isJobComplete(initialize=False) and self.load_job(
+                    self.current_file_index + 1):
+                self.load_image(index - tem)
+            else:
+                index = len(self.image_list) - 1
+                print(f"this pickle file doesn't finish labeling.")
+
+        self.current_image_index = index
+        try:
+            img = self.image_list[index]
+        except ValueError as e:
+            print("NO IMAGE")
+        return img
+
+    def load_job(self, index=1):
+
+        if index < 0:
+            print("it is the first job!! cannot got to previous job")
+            return False
+        elif index >= len(self.all_pickles_files):
+            if self.isJobComplete(len(self.all_pickles_files) - 1) and (
+                    self.current_file_index == len(self.all_pickles_files) - 1):
+                self.upload(True)
+            print("it is the last job")
+            return False
+
+        cv2.destroyAllWindows()
+        self.isJobComplete(index)
+        self.current_file_index = index
+
+        _, job_name, pkl_id, pkl_name = self.all_pickles_files[
+            self.current_file_index]
+        os.makedirs(rf"{self.res_label_path}\{job_name}", exist_ok=True)
+
+        print("current pickle :", pkl_name)
+
+        self.get_image_list2(pkl_id)
+
+        img = self.image_list[0][1]
+        image_height, image_width = img.shape[0], img.shape[1]
+        # self.current_json_path = self.get_json_path()
+        if not os.path.exists(self.current_json_path):
+            self.create_json_file(self.current_json_path, image_height,
+                                  image_width)
+
+        return True
+
+    def upload(self, c=None):
+
+        if c == None:
+            c = True
+            for job in self.jobs:
+                if not self.isJobComplete(job):
+                    c = False
+                    break
+
+        # upload
+        if c:
+            cv2.destroyAllWindows()
+
+            # print("all cloud jobs names:", all_jobs_names)
+            for ki in range(len(self.all_pickles_files)):
+                _, job_name, _, pkl_name = self.all_pickles_files[ki]
+                all_jobs_names = {}
+                res_folder = self.client.folder(self.res_item.id).get_items()
+                for x in res_folder:
+                    if x.type.capitalize() == 'Folder':
+                        all_jobs_names[x.name] = x.id
+                if job_name not in list(all_jobs_names.keys()):
+                    subfolder = self.client.folder(
+                        self.res_item.id).create_subfolder(job_name)
+                    print(f'Created subfolder with ID {subfolder.id}')
+                    new_file = self.client.folder(subfolder.id).upload(
+                        self.get_json_path(ki))
+                    print(
+                        f'File "{new_file.name}" uploaded to Box with file ID {new_file.id}'
+                    )
+                else:
+
+                    file_id = None
+                    folder = self.client.folder(
+                        all_jobs_names[job_name]).get_items()
+                    for item in folder:
+                        if item.name == self.get_json_path_noP(ki):
+                            file_id = item.id
+
+                    if file_id == None:
+                        new_file = self.client.folder(
+                            all_jobs_names[job_name]).upload(
+                                self.get_json_path(ki))
+                        print(
+                            f'File "{new_file.name}" uploaded to Box with file ID {new_file.id}'
+                        )
+                    else:
+                        chunked_uploader = self.client.file(
+                            file_id).update_contents(self.get_json_path(ki))
+                        print(
+                            f'File "{chunked_uploader.name}" has been updated')
+
+                    # try:
+
+                    # except:
+
+                    #     folder = self.client.folder(
+                    #         all_jobs_names[job_name]).get_items()
+                    #     for item in folder:
+                    #         if item.name == self.get_json_path_noP(ki):
+                    #             j9 = item.id
+                    #             break
+                    #     chunked_uploader = self.client.file(j9).update_contents(
+                    #         self.get_json_path(ki))
+                    #     print(
+                    #         f'File "{chunked_uploader.name}" has been updated')
+
+            sys.exit("you have done a good job!!")
+
+    def load_keypoints_from_json(self, image_id=None):
+        '''
+        from json file to upload the current points.
+        '''
+        # if ind == None:
+        #     ind = self.current_pickle_index
+        if (image_id == None):
+            image_id = self.image_list[self.current_image_index][0]
+
+        keypoints = dict()
+        # pck = self.pickle_list[ind]
+        # pck_path = self.get_json_path(pck)
+
+        if os.path.exists(self.current_json_path):
+            # with open(pck_path, "r") as json_file:
+            #     data = json.load(json_file)
+            data = self.current_json_data
+            # if len(data["keypoints"][self.category]) == 0 or (
+            #         len(data["keypoints"][self.category]) -
+            #         1) < self.current_image_index:
+            #     return keypoints
+            if image_id not in data["keypoints"][self.category]:
+                return keypoints
+
+            # for point_info in list(data["keypoints"][self.category].values())[
+            #         self.current_image_index]:
+            for point_info in data["keypoints"][self.category][image_id]:
+
+                keypoints[point_info['label']] = (
+                    point_info['points'][0],
+                    point_info['points'][1],
+                )
+
+        return keypoints
+
+    def reuse_label(self):
+        '''
+        reuse the last keypoints
+        '''
+        if self.last_image_index > -1 and self.current_image_index > self.last_image_index:
+            # print("self.current_image_index",self.current_image_index)
+            # print("self.last_image_index",self.last_image_index)
+            item = list(self.current_json_data["keypoints"][
+                self.category].values())[self.last_image_index]
+            for i in range(self.last_image_index + 1,
+                           self.current_image_index + 1):
+                self.current_json_data["keypoints"][self.category][
+                    self.image_list[i][0]] = item
+
+            self.last_image_index = self.current_image_index
+
+            keypoints = {}
+            for point_info in item:
+                # print(point_info)
+                keypoints[point_info['label']] = (
+                    point_info['points'][0],
+                    point_info['points'][1],
+                )
+
+            return keypoints
+        return {}
+
+    def save_empty_image(self, image_id=None):
+        if image_id == None:
+            image_id = self.image_list[self.current_image_index][0]
+        self.current_json_data["keypoints"][self.category][image_id] = []
+        self.last_image_index = self.current_image_index
+
+    def load_image_interface(self, index):
+        return self.load_image(self.current_image_index + index)
+
+    def load_pickle_interface(self, index):
+        return self.load_pickle(self.current_pickle_index + index)
+
+    def load_keypoints_interface(self,):
+        return self.load_keypoints_from_json()
+
+    def get_current_index(self):
+        return self.current_image_index
