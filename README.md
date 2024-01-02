@@ -41,7 +41,7 @@ in the 8-th step, we post our request. And we will get access token and refresh 
 
 Pls use these four key value: client_id, client_secret, access_token, refresh_token to finish the bx.toml.
 
-## Shortcut keys
+# Shortcut keys
 
 The following is the instruction of shortcut keys:
 
@@ -51,6 +51,10 @@ The following is the instruction of shortcut keys:
 About **File**:
 - **a**: previous **image** file
 - **s**: next **image** file
+- ~~**d**: pre 10 image file~~
+- ~~**f**: next 10 image file~~
+- ~~**g**: pre 100 image file~~
+- ~~**h**: next 100 image file~~
 
 - **x**: reuse the lastest labeled keypoints info to label from it to the current image
   
