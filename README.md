@@ -85,11 +85,11 @@ Sometimes you need to guess (you can infer the previous image from the back imag
 <img width="643" alt="bcc418530db579e42e003f9bef62773" src="https://github.com/YapengTeng/LabelTool/assets/105402346/11f93408-c245-4961-bbc3-6e23dd15d2c3">
 <img width="658" alt="6ba002849517e887965dd5478752453" src="https://github.com/YapengTeng/LabelTool/assets/105402346/1baf8f8d-7cb1-44b1-b0b0-75d8239deb07">
 <img width="748" alt="93505fa8abe5fb684c5ea579d4863d0" src="https://github.com/YapengTeng/LabelTool/assets/105402346/e21b605c-5351-49ab-b194-a238e6269fbb">
+<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/c1dfac37-635c-4cea-bc08-868b1d876f2c">
 <img width="720" alt="2e759784b932fe81610830174987c24" src="https://github.com/YapengTeng/LabelTool/assets/105402346/da39b422-ade7-4cce-958d-bead5ed847af">
 
 ## empty image
 <img width="864" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
-<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/c1dfac37-635c-4cea-bc08-868b1d876f2c">
 NOTE: in this case, you need to press ``k`` to save results with no keypoints
 
 TODO：
