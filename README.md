@@ -1,4 +1,4 @@
-# LabelTool
+<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/c1dfac37-635c-4cea-bc08-868b1d876f2c"># LabelTool
 
 ## Updates!!
 
@@ -59,6 +59,7 @@ About **File**:
 - ~~**f**: next 10 image file~~
 - ~~**g**: pre 100 image file~~
 - ~~**h**: next 100 image file~~
+- **k**: save empty (no keypoints) frames
 
 - **x**: reuse the lastest labeled keypoints info to label from it to the current image
   
@@ -72,6 +73,23 @@ About **Keypoints labels**:
 - If you skips images, and then label the current images, it will do interpolations between responding keypoints automatically. For example, just finish the 10-th image, containing 5 categories, and skip 10 images to the 20-th image. If you directly label it, it will do interpolations from the 10-th image to 20-th image. 
 - Default interpolation method is linear method, and you can change ``method`` variable in ``pipeline.py``.
 - Note that if the ``x`` coordinate can be same within two keypoints (i.e. they are parallel), it will sample uniformly points.
+
+# examples
+Sometimes you need to guess (you can infer the previous image from the back image)
+## sitting
+<img width="373" alt="cc7225a3fc2df770207bbe751b1e239" src="https://github.com/YapengTeng/LabelTool/assets/105402346/e1289055-77d8-4685-8916-8d43cc887c0d">
+<img width="214" alt="854ee7ece40d32256c8a065a63f7148" src="https://github.com/YapengTeng/LabelTool/assets/105402346/d3c43766-7b7f-4e56-bb5a-be23dcbcfcd5">
+
+## lying
+<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/4fc44c81-0b92-4d44-b73e-2234981afa08">
+<img width="643" alt="bcc418530db579e42e003f9bef62773" src="https://github.com/YapengTeng/LabelTool/assets/105402346/11f93408-c245-4961-bbc3-6e23dd15d2c3">
+<img width="658" alt="6ba002849517e887965dd5478752453" src="https://github.com/YapengTeng/LabelTool/assets/105402346/1baf8f8d-7cb1-44b1-b0b0-75d8239deb07">
+<img width="748" alt="93505fa8abe5fb684c5ea579d4863d0" src="https://github.com/YapengTeng/LabelTool/assets/105402346/e21b605c-5351-49ab-b194-a238e6269fbb">
+<img width="720" alt="2e759784b932fe81610830174987c24" src="https://github.com/YapengTeng/LabelTool/assets/105402346/da39b422-ade7-4cce-958d-bead5ed847af">
+
+## empty image
+<img width="864" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
+NOTE: in this case, you need to press ``k`` to save results with no keypoints
 
 TODO：
 1. average everyone's results
