@@ -1,4 +1,4 @@
-<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/c1dfac37-635c-4cea-bc08-868b1d876f2c"># LabelTool
+# LabelTool
 
 ## Updates!!
 
@@ -89,6 +89,7 @@ Sometimes you need to guess (you can infer the previous image from the back imag
 
 ## empty image
 <img width="864" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
+<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/c1dfac37-635c-4cea-bc08-868b1d876f2c">
 NOTE: in this case, you need to press ``k`` to save results with no keypoints
 
 TODO：
