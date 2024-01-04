@@ -26,7 +26,7 @@ class ImageNav:
                  shared_link,
                  res_link,
                  unique_code,
-                 res_label_path=r'.\label',
+                 res_label_path,
                  frame_rate=15):
         #  unique_file="unique_code.json"):
 
@@ -218,7 +218,7 @@ class ImageNav:
 
         _, job_name, pkl_id, pkl_name = self.all_pickles_files[
             self.current_file_index]
-        os.makedirs(rf"{self.res_label_path}\{job_name}", exist_ok=True)
+        os.makedirs(os.path.join(self.res_label_path, job_name), exist_ok=True)
 
         print("current pickle :", pkl_name)
 
@@ -390,7 +390,7 @@ class ImageNav:
 
         _, job_name, pkl_id, pkl_name = self.all_pickles_files[
             self.current_file_index]
-        os.makedirs(rf"{self.res_label_path}\{job_name}", exist_ok=True)
+        os.makedirs(os.path.join(self.res_label_path, job_name), exist_ok=True)
 
         print("current pickle :", pkl_name)
 

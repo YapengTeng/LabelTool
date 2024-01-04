@@ -6,6 +6,7 @@ import ImageNav5 as image_nav
 import json
 import numpy as np
 from matplotlib.colors import hsv_to_rgb
+import platform
 
 
 class KeyPointAnnotator:
@@ -20,7 +21,7 @@ class KeyPointAnnotator:
             res_link='https://cornell.box.com/s/esv1grzu3sfeif30r97i2okmyrmgbbpz',
             method='linear',
             interpolation=False,
-            res_path=rf'.\label',
+            res_path=None,
             frame_rate=5):
 
         self.colors = self.generate_random_colors(len(label))
@@ -90,6 +91,10 @@ class KeyPointAnnotator:
                 x, y = point
                 color = self.colors[self.image_nav.label.index(category)]
                 cv2.circle(image_copy, (x, y), 5, color, -1)
+                # cv2.putText(image_copy, f"{category}", (x - 20, y - 10),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 0.4,
+                #             self.colors[self.image_nav.label.index(category)],
+                #             1)
 
             # 在图像上显示当前关键点类别
             text = f"{self.image_nav.label[self.current_category_index]}, {self.image_nav.get_current_index()+1}/{len(self.image_nav.image_list)}, {self.image_nav.current_file_index+1}/{len(self.image_nav.all_pickles_files)}"
@@ -284,6 +289,8 @@ if __name__ == "__main__":
     # replace with the category
     category = "Mannequin"
 
+    current_system = platform.system()
+
     # replace with the keypoints categories
     keypoint_categories = [
         "head", "neck", "left shoulder", "right shoulder", "left elbow",
@@ -291,10 +298,21 @@ if __name__ == "__main__":
         "left knee", "right knee", "left foot", "right foot"
     ]
 
-    unique_code = '5ae68a1373014171d432fbb35dad599a'
+    unique_code = '0d4da1e66a17a4ccc0228716980d6345'
 
-    # path to configure file
-    config_file = r'./bx.toml'
+    # 构建路径
+    if current_system == "Windows":
+        res_path = ".\\label"
+        # path to configure file
+        config_file = r'.\bx.toml'
+    elif current_system == "Linux":
+        res_path = "./label"
+        # path to configure file
+        config_file = r'./bx.toml'
+    else:
+        # 如果不是 Windows 或 Linux，你可以根据需要添加其他系统的处理
+        res_path = ".\\label"
+        config_file = r'.\bx.toml'
 
     # interpolation parameter, when completing labeling, we will use it.
     method = 'linear'
@@ -312,5 +330,6 @@ if __name__ == "__main__":
                                   res_link,
                                   method,
                                   interpolation,
+                                  res_path,
                                   frame_rate=frame_rate)
     annotator.annotate_image()
