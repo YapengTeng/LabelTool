@@ -79,7 +79,8 @@ class ImageNav:
             client_id=client_id,
             client_secret=client_secret,
             access_token=access_token,
-            refresh_token=refresh_token)
+            refresh_token=refresh_token,
+            config_file=self.config_path)
 
         # Manually update tokens
 

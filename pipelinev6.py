@@ -291,10 +291,10 @@ if __name__ == "__main__":
         "left knee", "right knee", "left foot", "right foot"
     ]
 
-    unique_code = '0d4da1e66a17a4ccc0228716980d6345'
+    unique_code = '5ae68a1373014171d432fbb35dad599a'
 
     # path to configure file
-    config_file = r'.\bx.toml'
+    config_file = r'./bx.toml'
 
     # interpolation parameter, when completing labeling, we will use it.
     method = 'linear'

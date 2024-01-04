@@ -1,4 +1,5 @@
 import configparser, os, sys
+import traceback
 
 # 3rd party imports
 from boxsdk import Client, OAuth2
@@ -117,7 +118,7 @@ def update(access_token, refresh_token, config_file=None):
         config.write(ofh)
 
 
-def authenticate(client_id, client_secret, access_token, refresh_token):
+def authenticate(client_id, client_secret, access_token, refresh_token, config_file):
     """Authenticates a user with their client id, client secret, and tokens.
     By default, authentication information is stored in "~/.config/bx/bx.toml".
     Here is an example of bx.toml file:
@@ -137,7 +138,7 @@ def authenticate(client_id, client_secret, access_token, refresh_token):
     auth = OAuth2(client_id=client_id,
                   client_secret=client_secret,
                   refresh_token=refresh_token,
-                  store_tokens=update)
+                  store_tokens=lambda access_token, refresh_token: update(access_token, refresh_token, config_file=config_file))
 
     try:
         access_token, refresh_token = auth.refresh(None)
@@ -145,6 +146,11 @@ def authenticate(client_id, client_secret, access_token, refresh_token):
         # User may not have refreshed
         # their token in 60 or more days
         err(e)
+        # Printing the type of exception
+        print(f"Exception type: {type(e).__name__}")
+        # Printing the exception and its stack trace
+        print("Exception and stack trace:")
+        traceback.print_exc()
         err("\nFatal: Authentication token has expired!")
         fatal(" - Create a new token at: https://developer.box.com/")
 
