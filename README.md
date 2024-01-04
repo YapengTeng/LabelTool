@@ -86,8 +86,8 @@ About **Keypoints labels**:
 ## lying
 <img width="726" alt="91e25d48f3fbe9b7678badebf775903" src="https://github.com/YapengTeng/LabelTool/assets/105402346/82d8ac09-d3a3-4245-b6a0-c7ca98c101b2">
 <img width="662" alt="7c54a39179cf21c724b239f965405bb" src="https://github.com/YapengTeng/LabelTool/assets/105402346/1fc1fe52-718a-476f-9fd7-afc5e4f0d336">
-<img width="726" alt="91e25d48f3fbe9b7678badebf775903" src="https://github.com/YapengTeng/LabelTool/assets/105402346/bde7c825-1064-44bd-94fa-7f54d4465a99">
-<img width="726" alt="91e25d48f3fbe9b7678badebf775903" src="https://github.com/YapengTeng/LabelTool/assets/105402346/b1c837ea-62e6-498a-b5a6-502e297b9b8f">
+<img width="746" alt="5c466e6d132acd827c9dee0b93ea26d" src="https://github.com/YapengTeng/LabelTool/assets/105402346/e73f4a34-e43d-4b27-92c0-9608d47d0396">
+
 
 ## empty image
 <img width="864" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
