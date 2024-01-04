@@ -42,7 +42,7 @@ code: we will get in next step.
 12. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/f60629e4-c159-49d7-8b94-e4ac9407e96a)
 14. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/478a5634-1755-4e3e-870c-6b028f894aa6)
 in the 8-th step, we post our request. And we will get access token and refresh token.
-Sometimes you need to repeat many times to get the refresh code. Take patiance. Also if you are remindered that the token is expired, you can try to apply the refresh token again.
+**Sometimes you need to repeat many times to get the refresh code. Take patiance. Also if you are remindered that the token is expired, you can try to apply the refresh token again.**
 
 Pls use these four key value: client_id, client_secret, access_token, refresh_token to finish the bx.toml.
 
@@ -76,7 +76,7 @@ About **Keypoints labels**:
 - Note that if the ``x`` coordinate can be same within two keypoints (i.e. they are parallel), it will sample uniformly points.
 
 # examples
-Sometimes you need to guess (you can infer the previous image from the back image)
+**Sometimes you need to guess (btw, you can infer the previous image from the back image)**
 ## sitting
 <img width="373" alt="cc7225a3fc2df770207bbe751b1e239" src="https://github.com/YapengTeng/LabelTool/assets/105402346/e1289055-77d8-4685-8916-8d43cc887c0d">
 <img width="214" alt="854ee7ece40d32256c8a065a63f7148" src="https://github.com/YapengTeng/LabelTool/assets/105402346/d3c43766-7b7f-4e56-bb5a-be23dcbcfcd5">
