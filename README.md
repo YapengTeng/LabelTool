@@ -42,6 +42,7 @@ code: we will get in next step.
 12. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/f60629e4-c159-49d7-8b94-e4ac9407e96a)
 14. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/478a5634-1755-4e3e-870c-6b028f894aa6)
 in the 8-th step, we post our request. And we will get access token and refresh token.
+Sometimes you need to repeat many times to get the refresh code. Take patiance. Also if you are remindered that the token is expired, you can try to apply the refresh token again.
 
 Pls use these four key value: client_id, client_secret, access_token, refresh_token to finish the bx.toml.
 
