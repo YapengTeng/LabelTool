@@ -27,9 +27,14 @@ Pls follow steps by steps to setup. Then you can directly label without need of 
 3. ![Custom](https://github.com/YapengTeng/LabelTool/assets/105402346/6e6ee0b3-2103-44d9-8b9b-ccaee0b2b7ba)
 4. ![The step 2 choose the OAuth2.0](https://github.com/YapengTeng/LabelTool/assets/105402346/dac40c66-1e28-45e7-90ef-5cdd485e6f68)
 5. ![the configuration page: revise the url and choose the option and then click ``save changes``](https://github.com/YapengTeng/LabelTool/assets/105402346/ae9a085c-a3b7-4b18-9711-ab3908478980)
-6. pls download POSTMAN chrome extension. What I use is PostWoman Http Test.
-7. ![click](https://github.com/YapengTeng/LabelTool/assets/105402346/ffb41cd9-5662-44f7-af52-39da9eb41e02)
-8. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/ed23cac5-0ec8-4211-9747-6692ebf7d607)
+6. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/ad28f5f4-ce95-4198-9ae0-9d7f09e77730)
+  ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/ede082e9-bdfb-4df3-96a9-8a49cba81f60)
+![image](https://github.com/YapengTeng/LabelTool/assets/105402346/4c4703cc-6ac4-4db9-8efd-25102b4aaa99)
+   copy the developer token, and client id and secret to replace the variable in ``box_test2.py`` and run this code.
+   
+8. pls download POSTMAN chrome extension. What I use is PostWoman Http Test.
+9. ![click](https://github.com/YapengTeng/LabelTool/assets/105402346/ffb41cd9-5662-44f7-af52-39da9eb41e02)
+10. ![image](https://github.com/YapengTeng/LabelTool/assets/105402346/ed23cac5-0ec8-4211-9747-6692ebf7d607)
 https://app.box.com/api/oauth2/token
 
 grant_type: authorization_code
