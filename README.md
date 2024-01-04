@@ -84,12 +84,10 @@ About **Keypoints labels**:
 <img width="368" alt="77b202addd2c3ee449970b6df95bb59" src="https://github.com/YapengTeng/LabelTool/assets/105402346/df353203-886c-4db0-8c54-7c4bbd440e41">
 
 ## lying
-<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/4fc44c81-0b92-4d44-b73e-2234981afa08">
-<img width="643" alt="bcc418530db579e42e003f9bef62773" src="https://github.com/YapengTeng/LabelTool/assets/105402346/11f93408-c245-4961-bbc3-6e23dd15d2c3">
-<img width="658" alt="6ba002849517e887965dd5478752453" src="https://github.com/YapengTeng/LabelTool/assets/105402346/1baf8f8d-7cb1-44b1-b0b0-75d8239deb07">
-<img width="748" alt="93505fa8abe5fb684c5ea579d4863d0" src="https://github.com/YapengTeng/LabelTool/assets/105402346/e21b605c-5351-49ab-b194-a238e6269fbb">
-<img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/c1dfac37-635c-4cea-bc08-868b1d876f2c">
-<img width="720" alt="2e759784b932fe81610830174987c24" src="https://github.com/YapengTeng/LabelTool/assets/105402346/da39b422-ade7-4cce-958d-bead5ed847af">
+<img width="726" alt="91e25d48f3fbe9b7678badebf775903" src="https://github.com/YapengTeng/LabelTool/assets/105402346/82d8ac09-d3a3-4245-b6a0-c7ca98c101b2">
+<img width="662" alt="7c54a39179cf21c724b239f965405bb" src="https://github.com/YapengTeng/LabelTool/assets/105402346/1fc1fe52-718a-476f-9fd7-afc5e4f0d336">
+<img width="726" alt="91e25d48f3fbe9b7678badebf775903" src="https://github.com/YapengTeng/LabelTool/assets/105402346/bde7c825-1064-44bd-94fa-7f54d4465a99">
+<img width="726" alt="91e25d48f3fbe9b7678badebf775903" src="https://github.com/YapengTeng/LabelTool/assets/105402346/b1c837ea-62e6-498a-b5a6-502e297b9b8f">
 
 ## empty image
 <img width="864" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
