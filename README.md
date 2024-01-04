@@ -78,8 +78,10 @@ About **Keypoints labels**:
 # examples
 **Sometimes you need to guess (btw, you can infer the previous image from the back image)**
 ## sitting
-<img width="373" alt="cc7225a3fc2df770207bbe751b1e239" src="https://github.com/YapengTeng/LabelTool/assets/105402346/e1289055-77d8-4685-8916-8d43cc887c0d">
-<img width="214" alt="854ee7ece40d32256c8a065a63f7148" src="https://github.com/YapengTeng/LabelTool/assets/105402346/d3c43766-7b7f-4e56-bb5a-be23dcbcfcd5">
+<img width="275" alt="49398a1705b9728361057a8455932c0" src="https://github.com/YapengTeng/LabelTool/assets/105402346/b972e22d-3a9f-42df-87ac-2933b0593337">
+<img width="221" alt="c4cd02c7b742c6276a5b3b9c98f894e" src="https://github.com/YapengTeng/LabelTool/assets/105402346/0422bd04-4326-48c0-97ad-fd84bc6073e5">
+<img width="364" alt="02241304dca0adac5bf202e579b4484" src="https://github.com/YapengTeng/LabelTool/assets/105402346/38a4a67f-30b6-4f12-95c2-ea7c4251a6bb">
+<img width="368" alt="77b202addd2c3ee449970b6df95bb59" src="https://github.com/YapengTeng/LabelTool/assets/105402346/df353203-886c-4db0-8c54-7c4bbd440e41">
 
 ## lying
 <img width="720" alt="544715afb2bda83fe01e0e0cb09d777" src="https://github.com/YapengTeng/LabelTool/assets/105402346/4fc44c81-0b92-4d44-b73e-2234981afa08">
