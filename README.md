@@ -2,9 +2,13 @@
 
 ## Updates!!
 
-Everytime before starting to do label job, you need to get the unique code. Pls replace the ``unique_code`` variable in ``pipelinev6.py`` with what you get. And then run it. In my code, I use the ''.\xxxx\xxx'' to represent relative path. If it failed in your pc, you can try ''xxxx\xxx''.
+Everytime before starting to do label job, you need to get the unique code. Pls replace the ``unique_code`` variable in ``pipelinev6.py`` with what you get. And then run it.
 
-You can use the environment token if you want to try, which is refreshed frequently. So if it fail, you can setup the environment according to the following **``cloud``** section.
+You can setup the environment according to the following **``cloud``** section.
+
+## Bugs
+
+TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `k`. So without pressing `k`, it will leave one keypoint when you skip to another image.
 
 # environment
 There are 3 ways for you guys to quickly set up.
