@@ -10,6 +10,8 @@ You can setup the environment according to the following **``cloud``** section.
 
 TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `k`. So without pressing `k`, it will leave one keypoint when you skip to another image.
 
+undo, reference
+
 # environment
 There are 3 ways for you guys to quickly set up.
 
