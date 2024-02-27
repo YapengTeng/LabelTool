@@ -8,7 +8,7 @@ You need to type in your email to login box in case.
 
 ## Bugs
 
-TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `k`. So without pressing `k`, it will leave one keypoint when you skip to another image.
+TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `g`. So without pressing `g`, it will leave one keypoint when you skip to another image.
 
 # environment
 
@@ -57,7 +57,8 @@ About **File**:
 <img style="width: 900px; height: 300px; object-fit: cover;" alt="1f782c44596b37331d1a721bd9a56a2" src="https://github.com/YapengTeng/LabelTool/assets/105402346/de62b133-1f39-480a-9996-5fbec78dfbf2">
 
 ## empty image
-<img style="width: 900px; height: 300px; object-fit: cover;" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
+<img style="width: 900px; height: 600px; object-fit: cover;" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
+
 NOTE: in this case, you need to press ``g`` to save results with no keypoints
 
 
