@@ -2,7 +2,7 @@
 
 ## Updates!!
 
-Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser``、``cornell_eml`` with your own values.
+Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser``、``cornell_eml`` with your own values. Then ``run pipeline.py``
 
 # environment
 
