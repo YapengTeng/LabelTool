@@ -3,6 +3,7 @@
 ## Updates!!
 
 Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser``、``cornell_eml`` with your own values. Then ``run pipeline.py``
+Note: we don't have funtions to cancel all points, and pls label images one by one; you cannot label images with unlabeled images between except directly using ``reuse`` function.
 
 # environment
 
