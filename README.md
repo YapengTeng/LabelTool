@@ -2,13 +2,7 @@
 
 ## Updates!!
 
-Everytime before starting to do label job, you need to get the unique code. Pls replace the ``unique_code`` variable in ``pipeline_cloud.py`` with what you get. And then run it.
-
-You need to type in your email to login box in case.
-
-## Bugs
-
-TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `g`. So without pressing `g`, it will leave one keypoint when you skip to another image.
+Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser``、``cornell_eml`` with your own values.
 
 # environment
 
@@ -36,6 +30,10 @@ About **File**:
 - ~~**f**: next 10 image file~~
 - ~~**g**: pre 100 image file~~
 - ~~**h**: next 100 image file~~
+
+## Bugs
+
+TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `g`. So without pressing `g`, it will leave one keypoint when you skip to another image.
 
 ## ``interpolation`` function, which is stoped in labeling period: 
 - If you skips images, and then label the current images, it will do interpolations between responding keypoints automatically. For example, just finish the 10-th image, containing 5 categories, and skip 10 images to the 20-th image. If you directly label it, it will do interpolations from the 10-th image to 20-th image. 
