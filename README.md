@@ -14,7 +14,7 @@ The following is the instruction of shortcut keys:
 
 - **Left  Click**                  : add keypoint **and it will directly skip to the next label after click**
 - **Right Click**                  : remove **the last** keypoint, like undo, also **it will directly skip to canceled label after click**
-- **Mouse Scroll**                 : forward scrolling skip to previous image; ow backward scrolling skip to next image. Note: if backward scrolling cannot skip to next image, you can press Shift + scrolling (Because some platforms cannot support).
+- **Mouse Scroll**                 : forward scrolling skip to previous image; ow backward scrolling skip to next image. Note: if backward scrolling cannot skip to next image, you can try to press Shift + scrolling (Because some platforms cannot support).
   
 About **File**:
 - **a**: previous **image** file
