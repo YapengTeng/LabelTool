@@ -45,10 +45,10 @@ About **File**:
 # examples
 **Sometimes you need to guess (btw, you can infer the previous image from the back image)**
 ## sitting
-<img style="width: 450px; height: 300px; object-fit: cover;" alt="49398a1705b9728361057a8455932c0" src="https://github.com/YapengTeng/LabelTool/assets/105402346/b972e22d-3a9f-42df-87ac-2933b0593337">
-<img style="width: 450px; height: 300px; object-fit: cover;" alt="c4cd02c7b742c6276a5b3b9c98f894e" src="https://github.com/YapengTeng/LabelTool/assets/105402346/0422bd04-4326-48c0-97ad-fd84bc6073e5">
-<img style="width: 450px; height: 300px; object-fit: cover;" alt="02241304dca0adac5bf202e579b4484" src="https://github.com/YapengTeng/LabelTool/assets/105402346/38a4a67f-30b6-4f12-95c2-ea7c4251a6bb">
-<img style="width: 450px; height: 300px; object-fit: cover;" alt="77b202addd2c3ee449970b6df95bb59" src="https://github.com/YapengTeng/LabelTool/assets/105402346/df353203-886c-4db0-8c54-7c4bbd440e41">
+<img style="width: 450px; height: 600px; object-fit: cover;" alt="49398a1705b9728361057a8455932c0" src="https://github.com/YapengTeng/LabelTool/assets/105402346/b972e22d-3a9f-42df-87ac-2933b0593337">
+<img style="width: 450px; height: 600px; object-fit: cover;" alt="c4cd02c7b742c6276a5b3b9c98f894e" src="https://github.com/YapengTeng/LabelTool/assets/105402346/0422bd04-4326-48c0-97ad-fd84bc6073e5">
+<img style="width: 450px; height: 600px; object-fit: cover;" alt="02241304dca0adac5bf202e579b4484" src="https://github.com/YapengTeng/LabelTool/assets/105402346/38a4a67f-30b6-4f12-95c2-ea7c4251a6bb">
+<img style="width: 450px; height: 600px; object-fit: cover;" alt="77b202addd2c3ee449970b6df95bb59" src="https://github.com/YapengTeng/LabelTool/assets/105402346/df353203-886c-4db0-8c54-7c4bbd440e41">
 
 ## lying
 <img style="width: 900px; height: 300px; object-fit: cover;" alt="91e25d48f3fbe9b7678badebf775903" src="https://github.com/YapengTeng/LabelTool/assets/105402346/82d8ac09-d3a3-4245-b6a0-c7ca98c101b2">
@@ -57,7 +57,7 @@ About **File**:
 <img style="width: 900px; height: 300px; object-fit: cover;" alt="1f782c44596b37331d1a721bd9a56a2" src="https://github.com/YapengTeng/LabelTool/assets/105402346/de62b133-1f39-480a-9996-5fbec78dfbf2">
 
 ## empty image
-<img width="864" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
+<img style="width: 900px; height: 300px; object-fit: cover;" alt="7bf9466e845919f9ce30816dd04fbd4" src="https://github.com/YapengTeng/LabelTool/assets/105402346/44cbeb80-36e0-4583-90b5-6e0250eeafec">
 NOTE: in this case, you need to press ``g`` to save results with no keypoints
 
 
