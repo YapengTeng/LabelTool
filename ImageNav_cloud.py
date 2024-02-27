@@ -12,6 +12,53 @@ import io
 import math
 import sys
 
+import time
+
+
+class TrackedDict:
+
+    def __init__(self, keys=None):
+        self.data = {}
+        self.modification_times = {}
+        self.count = 0
+        if keys:
+            for key in keys:
+                self.data[key] = None
+                self.modification_times[key] = None
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+        self.modification_times[key] = self.count
+        self.count+=1
+
+    def __len__(self):
+        return len([key for key, value in self.data.items() if value])
+
+    def items(self):
+
+        return self.data.items()
+
+    def get_most_recently_modified_key(self):
+
+        valid_keys = [
+            key for key, value in self.modification_times.items()
+            if value is not None
+        ]
+
+        if not valid_keys:
+            return None
+
+        return max(valid_keys, key=self.modification_times.get)
+
+    def delete_most_recently_modified_value(self):
+        key = self.get_most_recently_modified_key()
+        if key:
+            self.data[key] = None
+            self.modification_times[key] = None
+        
+            return key
+        return None
+
 
 class ImageNav:
     ''' 
@@ -27,10 +74,11 @@ class ImageNav:
                  res_link,
                  unique_code,
                  res_label_path,
-                 frame_rate=15):
+                 frame_rate=15,
+                 params=None):
         #  unique_file="unique_code.json"):
 
-        self.category = category    # dummy
+        self.category = category    # Mannequin
         self.label = label    # [head,...,]
         self.config_path = config_path
         self.res_label_path = res_label_path
@@ -41,8 +89,6 @@ class ImageNav:
 
         self.repeated_number = None
 
-        # right now set local file, we will upload to cloud and update it in real time
-        # self.unique_file = unique_file
         self.res_item = None
 
         self.client = None
@@ -51,14 +97,13 @@ class ImageNav:
         }    # {box job item: rgb pickle} -> user needs to label
 
         print(f"currently configure path: {config_path}")
-        self.configure()
+        self.configure(params)
 
         self.current_file_index = 0
 
         self.image_list = []
 
         # need to care for setting value
-
         self.current_image_index = 0
         self.current_json_path = None
         self.current_json_data = None
@@ -69,39 +114,63 @@ class ImageNav:
         os.makedirs(rf"{self.res_label_path}", exist_ok=True)
         self.initialization()
 
-    def configure(self):
+    def configure(self, params):
 
         client_id, client_secret, access_token, refresh_token = box_utils.parsed(
-            config_file=self.config_path)
+            params, config_file=self.config_path)
 
-        # Test token refresh
-        new_access_token, new_refresh_token = box_utils.authenticate(
-            client_id=client_id,
-            client_secret=client_secret,
-            access_token=access_token,
-            refresh_token=refresh_token,
-            config_file=self.config_path)
+        try:
 
-        # Manually update tokens
+            # Test authentication
+            auth = OAuth2(client_id=client_id,
+                          client_secret=client_secret,
+                          access_token=access_token,
+                          refresh_token=refresh_token,
+                          store_tokens=box_utils.update)
 
-        box_utils.update(access_token=new_access_token,
-                         refresh_token=new_refresh_token,
-                         config_file=self.config_path)
+            # Test token refresh
+            # new_access_token, new_refresh_token = box_utils.authenticate(
+            #     client_id=client_id,
+            #     client_secret=client_secret,
+            #     access_token=access_token,
+            #     refresh_token=refresh_token,
+            #     config_file=self.config_path)
 
-        # Test authentication
-        auth = OAuth2(client_id=client_id,
-                      client_secret=client_secret,
-                      access_token=new_access_token,
-                      refresh_token=new_refresh_token,
-                      store_tokens=box_utils.update)
+            # Manually update tokens
 
-        # Get user info
-        self.client = Client(auth)
-        user = self.client.user().get()
-        print("The current app user ID is {0}".format(user.id))
+            # box_utils.update(access_token=new_access_token,
+            #                  refresh_token=new_refresh_token,
+            #                  config_file=self.config_path)
 
-        self.res_item = self.client.get_shared_item(self.res_link)
-        res_folder = self.client.folder(folder_id=self.res_item.id).get_items()
+            # Get user info
+            self.client = Client(auth)
+            user = self.client.user().get()
+            print("The current app user ID is {0}".format(user.id))
+            self.res_item = self.client.get_shared_item(self.res_link)
+            res_folder = self.client.folder(
+                folder_id=self.res_item.id).get_items()
+
+        except:
+            client_id, client_secret, access_token, refresh_token = box_utils.generate_refresh_token(
+                *params)
+
+            box_utils.update(access_token=access_token,
+                             refresh_token=refresh_token,
+                             config_file=self.config_path)
+
+            auth = OAuth2(client_id=client_id,
+                          client_secret=client_secret,
+                          access_token=access_token,
+                          refresh_token=refresh_token,
+                          store_tokens=box_utils.update)
+
+            # Get user info
+            self.client = Client(auth)
+            user = self.client.user().get()
+            print("The current app user ID is {0}".format(user.id))
+            self.res_item = self.client.get_shared_item(self.res_link)
+            res_folder = self.client.folder(
+                folder_id=self.res_item.id).get_items()
 
         for x in res_folder:
             if x.name == 'unique_code.json':
@@ -115,7 +184,7 @@ class ImageNav:
         self.repeated_number = self.all_pickles_files["repeat number"]
         self.all_pickles_files = self.all_pickles_files['jobIdName_pklIdName']
 
-    def get_image_list2(self, id=None):
+    def get_image_list(self, id=None):
         if id == None:
             _, _, id, _ = self.all_pickles_files[self.current_file_index]
 
@@ -201,7 +270,7 @@ class ImageNav:
         file_name = os.path.splitext(os.path.basename(pkl_name))[0]
         return f"{file_name}_{self.unique_code}.json"
 
-    # 初始化，本地和云端，来看标定到哪一个文件了
+    # initialize
     def initialization(self):
         '''
         comfirm the index according to the json file.
@@ -222,12 +291,12 @@ class ImageNav:
 
         print("current pickle :", pkl_name)
 
-        self.get_image_list2(pkl_id)
+        self.get_image_list(pkl_id)
 
-        img = self.image_list[0][1]
-        image_height, image_width = img.shape[0], img.shape[1]
         # self.current_json_path = self.get_json_path()
         if not os.path.exists(self.current_json_path):
+            img = self.image_list[0][1]
+            image_height, image_width = img.shape[0], img.shape[1]
             self.create_json_file(self.current_json_path, image_height,
                                   image_width)
 
@@ -266,14 +335,17 @@ class ImageNav:
         if len(keypoints) > 0:
             # previous and next cases
             if self.current_image_index <= self.last_image_index + 1:
+
                 item = []
                 for label, point in keypoints.items():
                     # print(f"Category: {label}, Coordinates: {point[0]}, {point[1]}")
+
                     revised_info = {
                         "label": label,
-                        "points": point[:2],
+                        "points": point[:2] if point else None,
                         "shape_type": "point",
                     }
+
                     # add new keypoints
                     item.append(revised_info)
 
@@ -340,8 +412,8 @@ class ImageNav:
                     with open(self.current_json_path, "w") as json_file:
                         json.dump(self.current_json_data, json_file, indent=2)
 
-        # else:
-        #     print("Because the number of all labeled keypoints don't equal to number of label. Saving failed.")
+    # else:
+    #     print("Because the number of all labeled keypoints don't equal to number of label. Saving failed.")
 
     def load_image(self, index=1):
         '''
@@ -394,7 +466,7 @@ class ImageNav:
 
         print("current pickle :", pkl_name)
 
-        self.get_image_list2(pkl_id)
+        self.get_image_list(pkl_id)
 
         img = self.image_list[0][1]
         image_height, image_width = img.shape[0], img.shape[1]
@@ -474,16 +546,21 @@ class ImageNav:
 
             sys.exit("you have done a good job!!")
 
-    def load_keypoints_from_json(self, image_id=None):
+    def load_keypoints_from_json(self, current=True):
         '''
         from json file to upload the current points.
         '''
         # if ind == None:
         #     ind = self.current_pickle_index
-        if (image_id == None):
+        keypoints = TrackedDict(self.label)
+        if current:
             image_id = self.image_list[self.current_image_index][0]
+        else:
+            if -1 < self.last_image_index < self.current_image_index:
+                image_id = self.image_list[self.last_image_index][0]
+            else:
+                return keypoints
 
-        keypoints = dict()
         # pck = self.pickle_list[ind]
         # pck_path = self.get_json_path(pck)
 
@@ -500,12 +577,16 @@ class ImageNav:
 
             # for point_info in list(data["keypoints"][self.category].values())[
             #         self.current_image_index]:
+            # data["keypoints"][self.category][img_id]
+            
             for point_info in data["keypoints"][self.category][image_id]:
 
-                keypoints[point_info['label']] = (
-                    point_info['points'][0],
-                    point_info['points'][1],
-                )
+                if point_info['points']:
+
+                    keypoints[point_info['label']] = (
+                        point_info['points'][0],
+                        point_info['points'][1],
+                    )
 
         return keypoints
 
@@ -516,8 +597,8 @@ class ImageNav:
         if self.last_image_index > -1 and self.current_image_index > self.last_image_index:
             # print("self.current_image_index",self.current_image_index)
             # print("self.last_image_index",self.last_image_index)
-            item = list(self.current_json_data["keypoints"][
-                self.category].values())[self.last_image_index]
+            item = self.current_json_data["keypoints"][self.category][
+                self.image_list[self.last_image_index][0]]
             for i in range(self.last_image_index + 1,
                            self.current_image_index + 1):
                 self.current_json_data["keypoints"][self.category][
@@ -525,22 +606,46 @@ class ImageNav:
 
             self.last_image_index = self.current_image_index
 
-            keypoints = {}
+            keypoints = TrackedDict(self.label)
             for point_info in item:
                 # print(point_info)
-                keypoints[point_info['label']] = (
-                    point_info['points'][0],
-                    point_info['points'][1],
-                )
+                if point_info['points']:
+                    keypoints[point_info['label']] = (
+                        point_info['points'][0],
+                        point_info['points'][1],
+                    )
 
             return keypoints
-        return {}
+        return None
 
     def save_empty_image(self, image_id=None):
         if image_id == None:
             image_id = self.image_list[self.current_image_index][0]
-        self.current_json_data["keypoints"][self.category][image_id] = []
-        self.last_image_index = self.current_image_index
+
+        keypoints = TrackedDict()
+
+        if self.current_image_index <= self.last_image_index + 1:
+            item = []
+            for label, point in keypoints.items():
+                # print(f"Category: {label}, Coordinates: {point[0]}, {point[1]}")
+
+                revised_info = {
+                    "label": label,
+                    "points": point[:2] if point else None,
+                    "shape_type": "point",
+                }
+
+                # add new keypoints
+                item.append(revised_info)
+
+            self.current_json_data["keypoints"][self.category][image_id] = item
+            if (self.current_image_index == (self.last_image_index + 1)):
+
+                self.last_image_index = self.current_image_index
+
+            with open(self.current_json_path, "w") as json_file:
+                json.dump(self.current_json_data, json_file, indent=2)
+
 
     def load_image_interface(self, index):
         return self.load_image(self.current_image_index + index)
