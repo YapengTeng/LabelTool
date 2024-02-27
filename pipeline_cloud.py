@@ -388,9 +388,6 @@ if __name__ == "__main__":
     distance_threshold = 10
 
 
-
-    eml_secret = 'FKvG34h9'
-
     params = [
         client_id, client_secret, browser, eml_id, eml_secret, cornell_eml
     ]
