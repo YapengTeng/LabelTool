@@ -20,8 +20,8 @@ The following is the instruction of shortcut keys:
 About **File**:
 - **a**: previous **image** file
 - **s**: next **image** file
-- **n**: the next category
-- **p**: the previous category
+- **d**: the next category
+- **f**: the previous category
 - **g**: save empty (no keypoints) frames  : take care of image with empty keypoints.
 - **x**: reuse the lastest labeled keypoints info to label from it to the current image
 
