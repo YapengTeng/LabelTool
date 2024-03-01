@@ -36,7 +36,7 @@ About **File**:
 
 TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `g`. So without pressing `g`, it will leave one keypoint when you skip to another image.
 
-## ``interpolation`` function, which is stoped in labeling period: 
+## interpolation function, which is stoped in labeling period: 
 - If you skips images, and then label the current images, it will do interpolations between responding keypoints automatically. For example, just finish the 10-th image, containing 5 categories, and skip 10 images to the 20-th image. If you directly label it, it will do interpolations from the 10-th image to 20-th image. 
 - Default interpolation method is linear method, and you can change ``method`` variable in ``pipeline.py``.
 - Note that if the ``x`` coordinate can be same within two keypoints (i.e. they are parallel), it will sample uniformly points.
