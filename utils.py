@@ -185,7 +185,7 @@ def update_json_file(filename, new_data):
         f.write('\n' + '}')
 
 
-# 示例用法
+# 示例用法 number: pickle放几个,repeated：第几次repeated
 def distribute_pickle_files(jobs, number, repeated):
 
     random.seed(repeated)
