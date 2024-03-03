@@ -3,6 +3,7 @@
 ## Updates!!
 
 Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser``、``cornell_eml`` with your own values. Then ``run pipeline.py``
+If sometimes the code failed, just restart it. It will automatically setup the environment again.
 Note: we don't have funtions to erease all points, and pls label images one by one; you cannot save keypoints if there exists unlabeled images between except directly using ``reuse`` function.
 
 # environment
