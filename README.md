@@ -3,11 +3,12 @@
 ## Updates!!
 
 Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser``、``cornell_eml`` with your own values. Then ``run pipeline.py``
-Note: we don't have funtions to cancel all points, and pls label images one by one; you cannot label images with unlabeled images between except directly using ``reuse`` function.
+Note: we don't have funtions to erease all points, and pls label images one by one; you cannot save keypoints if there exists unlabeled images between except directly using ``reuse`` function.
 
 # environment
 
-TODO:
+You don't need to setup extra environment, just pip install necessary python libs.
+TODO: I will upload on requirements.txt including python libs needed.
 
 # Shortcut keys
 
