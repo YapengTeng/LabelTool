@@ -292,7 +292,7 @@ def generate_refresh_token(client_id,
 
 if __name__ == '__main__':
     cornell_id = 'yt633@cornell.edu'
-    cornell_secret = 'FKvG34h9'
+    cornell_secret = 'xxxxx'
     browser = 'chrome'
 
     client_id = '8vojaaev2osqplchabnczmcmzyou83w0'
