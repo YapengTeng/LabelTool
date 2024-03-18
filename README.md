@@ -6,6 +6,9 @@ Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser
 If sometimes the code failed, just restart it. It will automatically setup the environment again.
 Note: we don't have funtions to erease all points, and pls label images one by one; you cannot save keypoints if there exists unlabeled images between except directly using ``reuse`` function.
 
+You can drag the current keypoint by holding down the left button.
+Someone who is responsible for labeling the intervals can set ``label_intervals`` True.
+
 # environment
 
 You don't need to setup extra environment, just pip install necessary python libs.
