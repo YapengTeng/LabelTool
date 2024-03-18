@@ -7,7 +7,7 @@ If sometimes the code failed, just restart it. It will automatically setup the e
 Note: we don't have funtions to erease all points, and pls label images one by one; you cannot save keypoints if there exists unlabeled images between except directly using ``reuse`` function.
 
 You can drag the current keypoint by holding down the left button.
-Someone who is responsible for labeling the intervals can set ``label_intervals`` True.
+Someone who is responsible for labeling the intervals can set ``label_intervals`` True. And ``n`` is for setting the interval endpoints, ``m`` is for saving and uploading json file.
 
 # environment
 
