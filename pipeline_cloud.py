@@ -112,7 +112,6 @@ class KeyPointAnnotator:
             if self.reference:
 
                 for category, point in self.reference_keypoints.items():
-                    print(self.keypoints.data[category])
                     k = self.keypoints.data[category]
                     if point and not k:
                         x, y = point
@@ -134,7 +133,7 @@ class KeyPointAnnotator:
                 else:
                     start = self.image_nav.intervals[-1]
                     end = None
-                text += ", " + str(start) + "-" + str(end)
+                text += ", " + str(start+1) + "-" + str(end+1)
 
             text_x = 10
             text_y = 30
