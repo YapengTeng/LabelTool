@@ -28,14 +28,15 @@ class KeyPointAnnotator:
             res_path=None,
             reference=True,
             distance_threshold=10,
-            frame_rate=5):
+            frame_rate=5,
+            label_intervals=False):
 
         self.colors = self.generate_random_colors(
             len(label)) if not color else color
 
         self.image_nav = image_nav.ImageNav(config_path, category, label,
                                             shared_link, res_link, unique_code,
-                                            res_path, frame_rate, params)
+                                            res_path, frame_rate, params,label_intervals)
         self.image_id, self.image = self.image_nav.load_image(
             self.image_nav.current_image_index)
         self.method = method
@@ -53,6 +54,7 @@ class KeyPointAnnotator:
 
         # get pc's window size
         self.screen_width, self.screen_height = pyautogui.size()
+        self.label_intervals = label_intervals
 
     # randomly generate the color (B, G, R)
     def generate_random_colors(self, num_colors):
@@ -110,7 +112,9 @@ class KeyPointAnnotator:
             if self.reference:
 
                 for category, point in self.reference_keypoints.items():
-                    if point:
+                    print(self.keypoints.data[category])
+                    k = self.keypoints.data[category]
+                    if point and not k:
                         x, y = point
                         color = self.colors[self.image_nav.label.index(
                             category)]
@@ -123,6 +127,15 @@ class KeyPointAnnotator:
 
             # display the category on the image
             text = f"{self.image_nav.label[self.current_category_index]}, {self.image_nav.get_current_index()+1}/{len(self.image_nav.image_list)}, {self.image_nav.current_file_index+1}/{len(self.image_nav.all_pickles_files)}"
+            if self.label_intervals and len(self.image_nav.intervals)>=1:
+                if len(self.image_nav.intervals) %2 == 0:
+                    start = self.image_nav.intervals[-2]
+                    end = self.image_nav.intervals[-1]
+                else:
+                    start = self.image_nav.intervals[-1]
+                    end = None
+                text += ", " + str(start) + "-" + str(end)
+
             text_x = 10
             text_y = 30
             font = cv2.FONT_HERSHEY_SIMPLEX
@@ -243,14 +256,29 @@ class KeyPointAnnotator:
                     self.interpolation)    # 退出时保存标注信息
                 break
 
+            
+            # for intervals
+            elif key == ord("n"):
+                if self.label_intervals:
+                    self.image_nav.receive_start_end()
+            
+            elif key == ord("m"):
+                if self.label_intervals:
+                    self.image_nav.upload_intervals()
+                    break
+
         cv2.destroyAllWindows()
+
+    
+
+
 
     def mouse_callback(self, event, x, y, flags, param):
 
         # print(flags,event)
 
         # left click
-        if event == cv2.EVENT_LBUTTONDOWN:
+        if event == cv2.EVENT_LBUTTONUP:
 
             x, y = self.cover(x, y, self.distance_threshold)
             self.keypoints[self.image_nav.label[
@@ -262,6 +290,13 @@ class KeyPointAnnotator:
             else:
                 self.current_category_index = (self.current_category_index +
                                                1) % len(self.image_nav.label)
+        
+        
+        elif event == cv2.EVENT_LBUTTONDOWN:
+
+            x, y = self.cover(x, y, self.distance_threshold)
+            self.keypoints[self.image_nav.label[
+                self.current_category_index]] = ((x, y))
 
         # right click
         elif event == cv2.EVENT_RBUTTONDOWN:
@@ -339,8 +374,6 @@ if __name__ == "__main__":
     # replace with the category
     category = "Mannequin"
 
-    
-
     # replace with the keypoints categories
     keypoint_categories = [
         "head", "neck", "left shoulder", "right shoulder", "left elbow",
@@ -365,7 +398,7 @@ if __name__ == "__main__":
     # interpolation parameter, when completing labeling, we will use it.
     method = 'linear'
     interpolation = False
-    frame_rate = 5
+    frame_rate = 1
     client_id = '8vojaaev2osqplchabnczmcmzyou83w0'
     client_secret = 'BrR6NDEpSZm4jNIZ5VdlCComd72z1SIZ'
     SHARED_LINK_URL = 'https://cornell.box.com/s/zb9ycfdv0s6afn5p2hdwwjqxm3ghfq3d'
@@ -373,12 +406,12 @@ if __name__ == "__main__":
 
     unique_code = '6a7ac4538dca1fe9347a20af1e81185e'    # unique_code will distribute
 
-    eml_id = 'yt633@cornell.edu'  # 'tengyp99@gmail.com
-    eml_secret = 'xxxxxxx'
+    eml_id = 'tengyp99@gmail.com'  # 'tengyp99@gmail.com
+    eml_secret = 'xxxxxxxx'
     browser = 'chrome'    # firefox or chrome
-    cornell_eml = True   # if the email is cornell email, set True; ow set False
+    cornell_eml = False   # if the email is cornell email, set True; ow set False
 
-    reference = True
+    reference = True      # refer the last labeled points
 
     color = [(0, 255, 0), (255, 0, 0), (0, 0, 255),
              (255, 255, 0), (255, 0, 255), (0, 255, 255), (128, 0, 0),
@@ -386,6 +419,8 @@ if __name__ == "__main__":
              (0, 128, 128), (64, 0, 0), (0, 64, 0)]
 
     distance_threshold = 10
+
+    label_intervals = False  # if you are labeling the intervals
 
 
     params = [
@@ -395,7 +430,7 @@ if __name__ == "__main__":
     configuration = [
         config_file, category, keypoint_categories, SHARED_LINK_URL,
         unique_code, color, res_link, method, interpolation, res_path,
-        reference, distance_threshold, frame_rate
+        reference, distance_threshold, frame_rate, label_intervals
     ]
 
     annotator = KeyPointAnnotator(params, *configuration)

@@ -75,7 +75,8 @@ class ImageNav:
                  unique_code,
                  res_label_path,
                  frame_rate=15,
-                 params=None):
+                 params=None,
+                 label_intervals = False):
         #  unique_file="unique_code.json"):
 
         self.category = category    # Mannequin
@@ -86,6 +87,7 @@ class ImageNav:
         self.res_link = res_link
         self.frame_rate = frame_rate
         self.unique_code = unique_code
+        self.label_intervals = label_intervals
 
         self.repeated_number = None
 
@@ -172,34 +174,69 @@ class ImageNav:
             res_folder = self.client.folder(
                 folder_id=self.res_item.id).get_items()
 
+        intervals_file = None
+
         for x in res_folder:
             if x.name == 'unique_code.json':
                 unique_file = x
+            elif x.name == 'intervals.json':
+                intervals_file = x
         unique_file = self.client.file(unique_file.id).content()
         unique_file = io.BytesIO(unique_file)
         unique_file = json.load(unique_file)
 
+        
+        if intervals_file:
+            if self.label_intervals:
+                self.intervals = []
+            self.intervals_id = intervals_file.id
+            intervals_file = self.client.file(intervals_file.id).content()
+            intervals_file = io.BytesIO(intervals_file)
+            self.intervals_file = json.load(intervals_file)
+            
+        else:
+            self.intervals_file = {}
+            self.intervals = []
+            self.intervals_id = None
+        
         self.all_pickles_files = unique_file[self.unique_code]
 
         self.repeated_number = self.all_pickles_files["repeat number"]
         self.all_pickles_files = self.all_pickles_files['jobIdName_pklIdName']
 
-    def get_image_list(self, id=None):
+    def is_in_range(self, x, intervals):
+        for interval in intervals:
+            if interval[0] <= x <= interval[1]:
+                return True
+        return False
+
+    def get_image_list(self, id=None, pkl_name = None):
         if id == None:
-            _, _, id, _ = self.all_pickles_files[self.current_file_index]
+            _, _, id, pkl_name = self.all_pickles_files[self.current_file_index]
 
         file_content = self.client.file(id).content()
         file_content = io.BytesIO(file_content)
         self.image_list = []
-        count = self.frame_rate - 1
+        # get the intervals
+        if not self.label_intervals and self.intervals_file:
+            intervals_pkl = self.intervals_file.get(pkl_name, [])
+            self.intervals = []
+            if intervals_pkl:
+                self.intervals = intervals_pkl['intervals']
+                self.frame_rate = intervals_pkl['frame rate']
+
+        count = self.frame_rate-1
+
 
         while True:
             try:
+
                 data = pickle.load(file_content)
                 count += 1
-                if count == self.frame_rate:
+
+                if (count+1)%self.frame_rate==0 and (not self.intervals or self.is_in_range(count, self.intervals)):
                     self.image_list.append(data)
-                    count = 0
+
             except FileNotFoundError:
                 print(f" '{id}' file doesn't find.")
             except:
@@ -291,7 +328,7 @@ class ImageNav:
 
         print("current pickle :", pkl_name)
 
-        self.get_image_list(pkl_id)
+        self.get_image_list(pkl_id,pkl_name)
 
         # self.current_json_path = self.get_json_path()
         if not os.path.exists(self.current_json_path):
@@ -645,6 +682,33 @@ class ImageNav:
 
             with open(self.current_json_path, "w") as json_file:
                 json.dump(self.current_json_data, json_file, indent=2)
+
+    ##### for intervals
+    def receive_start_end(self,start=None):
+        print(self.current_image_index)
+        if self.current_file_index not in self.intervals:
+            self.intervals.append(self.current_image_index)
+    
+    def upload_intervals(self, ):
+        self.intervals = [list(pair) for pair in zip(self.intervals[::2], self.intervals[1::2])]
+        print(f'the intervals {self.intervals}')
+        _, _, id, pkl_name = self.all_pickles_files[self.current_file_index]
+
+        self.intervals_file[pkl_name] = {'intervals': self.intervals, 'frame rate': self.frame_rate}
+
+        script_path = os.path.abspath(__file__)
+        script_dir = os.path.dirname(script_path)
+        
+        json_path = os.path.join(script_dir,'intervals.json')
+        with open(json_path, 'w') as f:
+            json.dump(self.intervals_file, f, indent=2)
+        
+        if self.intervals_id:
+            updated_file = self.client.file(self.intervals_id).update_contents(json_path)
+            print(f'File "{updated_file.name}" updated with intervals and frame rate')
+        else:
+            new_file = self.client.folder(self.res_item.id).upload(json_path)
+            print(f'File "{new_file.name}" uploaded to Box with file ID {new_file.id}')
 
 
     def load_image_interface(self, index):
