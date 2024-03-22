@@ -448,9 +448,28 @@ class ImageNav:
 
                     with open(self.current_json_path, "w") as json_file:
                         json.dump(self.current_json_data, json_file, indent=2)
+        else:
+            k = self.current_json_data["keypoints"][self.category].pop(image_id, None)
+            if not k:
+                if self.current_json_data["keypoints"][self.category]:
+                    last_key = list(self.current_json_data["keypoints"][self.category].keys())[-1]
+                    self.last_image_index = next(index for index, value in enumerate(self.image_list) if value[0] == last_key)
 
     # else:
     #     print("Because the number of all labeled keypoints don't equal to number of label. Saving failed.")
+    
+    def get_last_value(d):
+    # 如果字典不为空，返回最后一个键对应的值
+        if d:
+            # Python 3.7+ 保证了字典的顺序
+            last_key = list(d.keys())[-1]
+            return d[last_key]
+        else:
+            # 如果字典为空，返回 None 或者抛出异常
+            return None
+
+
+
 
     def load_image(self, index=1):
         '''
