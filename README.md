@@ -2,12 +2,14 @@
 
 ## Updates!!
 
-Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser``、``cornell_eml`` with your own values. Then ``run pipeline.py``
+Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser`` with your own values. Then ``run pipeline_cloud.py``
 If sometimes the code failed, just restart it. It will automatically setup the environment again.
-Note: we don't have funtions to erease all points, and pls label images one by one; you cannot save keypoints if there exists unlabeled images between except directly using ``reuse`` function.
+Note: I recommand labeling images one by one; you cannot save keypoints if there exists unlabeled images between except directly using ``reuse`` function.
 
 You can drag the current keypoint by holding down the left button.
 Someone who is responsible for labeling the intervals can set ``label_intervals`` True. And ``n`` key is for setting the interval endpoints, ``m`` key is for saving and uploading json file.
+
+Have fixed bugs: now you can erase all keypoints when you skip the current image.
 
 # environment
 
@@ -30,6 +32,8 @@ About **File**:
 - **x**: reuse the lastest labeled keypoints info to label from it to the current image
 
 - **q**: quit
+- **n**: set the interval endpoints
+- **m**: save and upload json file.
 
 - ~~**d**: pre 10 image file~~
 - ~~**f**: next 10 image file~~
@@ -38,7 +42,9 @@ About **File**:
 
 ## Bugs
 
-TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `g`. So without pressing `g`, it will leave one keypoint when you skip to another image.
+~~TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `g`. So without pressing `g`, it will leave one keypoint when you skip to another image.~~ (has fixed).
+
+If you find some bugs, unexpected event or other requests, pls feel free to talk with me.
 
 ## interpolation function, which is stoped in labeling period: 
 - If you skips images, and then label the current images, it will do interpolations between responding keypoints automatically. For example, just finish the 10-th image, containing 5 categories, and skip 10 images to the 20-th image. If you directly label it, it will do interpolations from the 10-th image to 20-th image. 
