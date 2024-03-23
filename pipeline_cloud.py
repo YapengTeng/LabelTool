@@ -385,10 +385,7 @@ def is_cornell_email(email):
     else:
         return False
 
-# 测试函数
-test_emails = ['student@cornell.edu', 'faculty@harvard.edu', 'incorrect-email@cornell', 'another_student@cornell.edu']
-for email in test_emails:
-    print(f"{email}: {is_cornell_email(email)}")
+
 
 
 if __name__ == "__main__":
