@@ -12,6 +12,7 @@ import re
 
 current_system = platform.system()
 
+
 class KeyPointAnnotator:
 
     def __init__(
@@ -37,7 +38,8 @@ class KeyPointAnnotator:
 
         self.image_nav = image_nav.ImageNav(config_path, category, label,
                                             shared_link, res_link, unique_code,
-                                            res_path, frame_rate, params,label_intervals)
+                                            res_path, frame_rate, params,
+                                            label_intervals)
         self.image_id, self.image = self.image_nav.load_image(
             self.image_nav.current_image_index)
         self.method = method
@@ -64,11 +66,11 @@ class KeyPointAnnotator:
         return colors.tolist()
 
     def annotate_image(self):
-        
+
         param = (0,)
         cv2.namedWindow("Image", cv2.WINDOW_NORMAL)
 
-        cv2.setMouseCallback("Image", self.mouse_callback,param)
+        cv2.setMouseCallback("Image", self.mouse_callback, param)
 
         while True:
             window_exists = cv2.getWindowProperty("Image",
@@ -77,7 +79,7 @@ class KeyPointAnnotator:
             # create window if not exist
             if not window_exists:
                 cv2.namedWindow("Image", cv2.WINDOW_NORMAL)
-                cv2.setMouseCallback("Image", self.mouse_callback,param)
+                cv2.setMouseCallback("Image", self.mouse_callback, param)
             self.image_id, self.image = self.image_nav.load_image(
                 self.image_nav.current_image_index)
 
@@ -99,8 +101,7 @@ class KeyPointAnnotator:
 
             # label keypoint on the image
 
-            self.draw_picture(image_copy,reference_img)
-            
+            self.draw_picture(image_copy, reference_img)
 
             image_copy = cv2.addWeighted(image_copy, 0.5, reference_img, 0.5, 0)
 
@@ -203,19 +204,17 @@ class KeyPointAnnotator:
                     self.interpolation)    # 退出时保存标注信息
                 break
 
-            
             # for intervals
             elif key == ord("n"):
                 if self.label_intervals:
                     self.image_nav.receive_start_end()
-            
+
             elif key == ord("m"):
                 if self.label_intervals:
                     self.image_nav.upload_intervals()
                     break
 
         cv2.destroyAllWindows()
-
 
     def draw_picture(self, image_copy, reference_img):
         for category, point in self.keypoints.items():
@@ -236,8 +235,7 @@ class KeyPointAnnotator:
                 k = self.keypoints.data[category]
                 if point and not k:
                     x, y = point
-                    color = self.colors[self.image_nav.label.index(
-                        category)]
+                    color = self.colors[self.image_nav.label.index(category)]
 
                     transparent = (30,)
                     RGBA = color + transparent
@@ -245,14 +243,14 @@ class KeyPointAnnotator:
 
         # display the category on the image
         text = f"{self.image_nav.label[self.current_category_index]}, {self.image_nav.get_current_index()+1}/{len(self.image_nav.image_list)}, {self.image_nav.current_file_index+1}/{len(self.image_nav.all_pickles_files)}"
-        if self.label_intervals and len(self.image_nav.intervals)>=1:
-            if len(self.image_nav.intervals) %2 == 0:
+        if self.label_intervals and len(self.image_nav.intervals) >= 1:
+            if len(self.image_nav.intervals) % 2 == 0:
                 start = self.image_nav.intervals[-2]
                 end = self.image_nav.intervals[-1]
             else:
                 start = self.image_nav.intervals[-1]
                 end = None
-            text += ", " + str(start+1) + "-" + str(end+1)
+            text += ", " + str(start + 1) + "-" + str(end + 1)
 
         text_x = 10
         text_y = 30
@@ -267,13 +265,10 @@ class KeyPointAnnotator:
                                     font_scale,
                                     thickness=font_thickness)[0]
         cv2.rectangle(reference_img, (text_x - 5, text_y - text_size[1] - 5),
-                        (text_x + text_size[0] + 5, text_y + 5),
-                        background_color, -1)
+                      (text_x + text_size[0] + 5, text_y + 5), background_color,
+                      -1)
         cv2.putText(reference_img, text, (text_x, text_y), font, font_scale,
                     font_color, font_thickness)
-    
-
-
 
     def mouse_callback(self, event, x, y, flags, param):
 
@@ -288,8 +283,7 @@ class KeyPointAnnotator:
             else:
                 self.current_category_index = (self.current_category_index +
                                                1) % len(self.image_nav.label)
-        
-        
+
         # left click down flags the monment that left click down, to get the closet keypoint
         elif event == cv2.EVENT_LBUTTONDOWN:
 
@@ -299,7 +293,8 @@ class KeyPointAnnotator:
 
         elif event == cv2.EVENT_MOUSEMOVE:
             if flags & cv2.EVENT_FLAG_LBUTTON:
-                self.keypoints[self.image_nav.label[self.current_category_index]] = ((x, y))
+                self.keypoints[self.image_nav.label[
+                    self.current_category_index]] = ((x, y))
 
         # right click
         elif event == cv2.EVENT_RBUTTONDOWN:
@@ -323,7 +318,7 @@ class KeyPointAnnotator:
                 self.save_before_skip(-1)
 
         # shift + mouse scroll
-        elif event==11 and flags == cv2.EVENT_FLAG_SHIFTKEY:
+        elif event == 11 and flags == cv2.EVENT_FLAG_SHIFTKEY:
             print("up scroll")
             self.save_before_skip(-1)
 
@@ -357,7 +352,8 @@ class KeyPointAnnotator:
         if len(self.keypoints) != 0:
             key = self.keypoints.delete_most_recently_modified_value()
 
-            self.current_category_index = (self.image_nav.label.index(key)) % len(self.image_nav.label)
+            self.current_category_index = (
+                self.image_nav.label.index(key)) % len(self.image_nav.label)
         else:
             self.current_category_index = 0
 
@@ -371,6 +367,12 @@ class KeyPointAnnotator:
                     if distance < threshold:
                         return point[0], point[1], key
 
+            for key, point in self.keypoints.items():
+                if point:
+                    distance = math.sqrt((point[0] - x)**2 + (point[1] - y)**2)
+                    if distance < threshold:
+                        return point[0], point[1], key
+
         return x, y, self.image_nav.label[self.current_category_index]
 
 
@@ -379,13 +381,11 @@ def is_cornell_email(email):
     check whether the email belongs to @cornell.edu domain
     """
     pattern = r'^[a-zA-Z0-9._%+-]+@cornell\.edu$'
-    
+
     if re.match(pattern, email):
         return True
     else:
         return False
-
-
 
 
 if __name__ == "__main__":
@@ -425,22 +425,22 @@ if __name__ == "__main__":
 
     unique_code = '6a7ac4538dca1fe9347a20af1e81185e'    # unique_code will distribute
 
-    eml_id = 'tengyp99@gmail.com'  # 'tengyp99@gmail.com
-    eml_secret = 'xxxxxxx'
+    eml_id = 'tengyp99@gmail.com'    # 'tengyp99@gmail.com
+    eml_secret = 'FKvG34h9'
     browser = 'chrome'    # firefox or chrome
-    reference = True      # refer the last labeled points
+    reference = True    # refer the last labeled points
 
-    label_intervals = False  # if you are labeling the intervals
+    label_intervals = True    # if you are labeling the intervals
 
-
-    cornell_eml = is_cornell_email(eml_id)   # if the email is cornell email, set True; ow set False
+    cornell_eml = is_cornell_email(
+        eml_id)    # if the email is cornell email, set True; ow set False
     color = [(0, 255, 0), (255, 0, 0), (0, 0, 255),
              (255, 255, 0), (255, 0, 255), (0, 255, 255), (128, 0, 0),
              (0, 128, 0), (0, 0, 128), (128, 128, 0), (128, 0, 128),
              (0, 128, 128), (64, 0, 0), (0, 64, 0)]
 
     distance_threshold = 10
-    
+
     params = [
         client_id, client_secret, browser, eml_id, eml_secret, cornell_eml
     ]
