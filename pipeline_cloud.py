@@ -417,7 +417,7 @@ if __name__ == "__main__":
     # interpolation parameter, when completing labeling, we will use it.
     method = 'linear'
     interpolation = False
-    frame_rate = 1
+    frame_rate = 10
     client_id = '8vojaaev2osqplchabnczmcmzyou83w0'
     client_secret = 'BrR6NDEpSZm4jNIZ5VdlCComd72z1SIZ'
     SHARED_LINK_URL = 'https://cornell.box.com/s/zb9ycfdv0s6afn5p2hdwwjqxm3ghfq3d'
