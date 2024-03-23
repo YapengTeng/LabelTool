@@ -430,7 +430,7 @@ if __name__ == "__main__":
     browser = 'chrome'    # firefox or chrome
     reference = True    # refer the last labeled points
 
-    label_intervals = True    # if you are labeling the intervals
+    label_intervals = False    # if you are labeling the intervals
 
     cornell_eml = is_cornell_email(
         eml_id)    # if the email is cornell email, set True; ow set False
