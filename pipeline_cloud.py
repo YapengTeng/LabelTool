@@ -426,7 +426,7 @@ if __name__ == "__main__":
     unique_code = '6a7ac4538dca1fe9347a20af1e81185e'    # unique_code will distribute
 
     eml_id = 'tengyp99@gmail.com'    # 'tengyp99@gmail.com
-    eml_secret = 'FKvG34h9'
+    eml_secret = 'xxxx'
     browser = 'chrome'    # firefox or chrome
     reference = True    # refer the last labeled points
 
