@@ -44,6 +44,8 @@ About **File**:
 
 ~~TODO: The right click cannot undo all keypoints you previously labeled and then delete saved keypoints of the image, but you can save empty keypoint by pressing `g`. So without pressing `g`, it will leave one keypoint when you skip to another image.~~ (has fixed).
 
+TODO: frame rate cannot change between labeling, which should be fixed in advance.
+
 If you find some bugs, unexpected event or other requests, pls feel free to talk with me.
 
 ## interpolation function, which is stoped in labeling period: 
