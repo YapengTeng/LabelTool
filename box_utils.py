@@ -214,7 +214,7 @@ def get_code(client_id, browser, cornell_id, cornell_secret, cornell_eml=True):
 
     if cornell_eml:
 
-        login_input_box = WebDriverWait(driver, 10).until(
+        login_input_box = WebDriverWait(driver, 600).until(
             EC.visibility_of_element_located((By.ID, "username")))
 
         login_input_box.send_keys(cornell_id)
@@ -227,7 +227,7 @@ def get_code(client_id, browser, cornell_id, cornell_secret, cornell_eml=True):
 
         # driver.implicitly_wait(0.5)
 
-        trust_button = WebDriverWait(driver, 10).until(
+        trust_button = WebDriverWait(driver, 600).until(
             EC.visibility_of_element_located((By.ID, "trust-browser-button")))
 
         trust_button.click()
