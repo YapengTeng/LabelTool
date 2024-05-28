@@ -2,12 +2,14 @@
 
 ## Updates!!
 
-Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser`` with your own values. Then ``run pipeline_cloud.py``
+Change these variables ``unique_code``、``eml_id``、``eml_secret``、``browser`` and so on, with your own values in `config.yaml`. Then ``run pipeline_cloud.py``.
 If sometimes the code failed, just restart it. It will automatically setup the environment again.
 Note: I recommand labeling images one by one; you cannot save keypoints if there exists unlabeled images between except directly using ``reuse`` function.
 
 You can drag the current keypoint by holding down the left button.
-Someone who is responsible for labeling the intervals can set ``label_intervals`` True. And ``n`` key is for setting the interval endpoints, ``m`` key is for saving and uploading json file.
+Someone who is responsible for labeling the intervals can set ``label_intervals`` True in `config.yaml`. And ``n`` key is for setting the interval endpoints, ``m`` key is for saving and uploading json file.
+
+Support locally labelling. Set variable `local` with the folder name in `config.yaml` where you save the rgb pickle file. If you want to label the data from cloud, set `None`.
 
 Have fixed bugs: now you can erase all keypoints when you skip the current image.
 
