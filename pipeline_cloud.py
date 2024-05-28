@@ -9,6 +9,8 @@ from matplotlib.colors import hsv_to_rgb
 import platform
 import math
 import re
+import yaml
+
 
 current_system = platform.system()
 
@@ -31,7 +33,8 @@ class KeyPointAnnotator:
             reference=True,
             distance_threshold=10,
             frame_rate=5,
-            label_intervals=False):
+            label_intervals=False,
+            local = None):
 
         self.colors = self.generate_random_colors(
             len(label)) if not color else color
@@ -39,7 +42,7 @@ class KeyPointAnnotator:
         self.image_nav = image_nav.ImageNav(config_path, category, label,
                                             shared_link, res_link, unique_code,
                                             res_path, frame_rate, params,
-                                            label_intervals)
+                                            label_intervals,local)
         self.image_id, self.image = self.image_nav.load_image(
             self.image_nav.current_image_index)
         self.method = method
@@ -390,56 +393,63 @@ def is_cornell_email(email):
 
 if __name__ == "__main__":
 
-    # replace with the category
-    category = "Mannequin"
+    # get the environment variables
+    with open('config.yaml', 'r') as file:
+            config = yaml.safe_load(file)
+    data_setting = config['dataset']
+    label_settings = config['labeling']
+    cloud_settings = config['cloud']
 
-    # replace with the keypoints categories
-    keypoint_categories = [
-        "head", "neck", "left shoulder", "right shoulder", "left elbow",
-        "right elbow", "left hand", "right hand", "left pelvis", "right pelvis",
-        "left knee", "right knee", "left foot", "right foot"
-    ]
+    # get data settings
+    local = data_setting['local']
+    category = data_setting['category']
+    keypoint_categories = data_setting['keypoint_categories']
+
+    # get label settings
+    unique_code = label_settings['unique_code']
+    browser = label_settings['browser']
+    reference = label_settings['reference']
+    label_intervals = label_settings['label_intervals']
+    method = label_settings['method']
+    interpolation = label_settings['interpolation']
+    frame_rate = label_settings['frame_rate']
+    distance_threshold = label_settings['distance_threshold']
+    color = label_settings['color']
+
+    # get cloud settings
+    eml_id = cloud_settings['eml_id']
+    eml_secret = cloud_settings['eml_secret']
+    client_id = cloud_settings['client_id']
+    client_secret = cloud_settings['client_secret']
+    SHARED_LINK_URL = cloud_settings['SHARED_LINK_URL']
+    res_link = cloud_settings['res_link']
+
+
+    cornell_eml = is_cornell_email(
+        eml_id)    # if the email is cornell email, set True; ow set False
+    print(eml_id, eml_secret)
 
     # build path
     if current_system == "Windows":
         res_path = r".\\label"
         # path to configure file
         config_file = r'.\bx.toml'
+
+        # path to local data folder
+        if local:
+            local = rf'.\{local}'
     elif current_system == "Linux":
         res_path = r"./label"
         # path to configure file
         config_file = r'./bx.toml'
+        if local:
+            local = rf'./{local}'
     else:
         # other system
         res_path = r"label"
         config_file = r'bx.toml'
-
-    # interpolation parameter, when completing labeling, we will use it.
-    method = 'linear'
-    interpolation = False
-    frame_rate = 10
-    client_id = '8vojaaev2osqplchabnczmcmzyou83w0'
-    client_secret = 'BrR6NDEpSZm4jNIZ5VdlCComd72z1SIZ'
-    SHARED_LINK_URL = 'https://cornell.box.com/s/zb9ycfdv0s6afn5p2hdwwjqxm3ghfq3d'
-    res_link = 'https://cornell.box.com/s/esv1grzu3sfeif30r97i2okmyrmgbbpz'
-
-    unique_code = '6a7ac4538dca1fe9347a20af1e81185e'    # unique_code will distribute
-
-    eml_id = 'tengyp99@gmail.com'    # 'tengyp99@gmail.com
-    eml_secret = 'xxxx'
-    browser = 'chrome'    # firefox or chrome
-    reference = True    # refer the last labeled points
-
-    label_intervals = False    # if you are labeling the intervals
-
-    cornell_eml = is_cornell_email(
-        eml_id)    # if the email is cornell email, set True; ow set False
-    color = [(0, 255, 0), (255, 0, 0), (0, 0, 255),
-             (255, 255, 0), (255, 0, 255), (0, 255, 255), (128, 0, 0),
-             (0, 128, 0), (0, 0, 128), (128, 128, 0), (128, 0, 128),
-             (0, 128, 128), (64, 0, 0), (0, 64, 0)]
-
-    distance_threshold = 10
+        if local:
+            local = rf'{local}'
 
     params = [
         client_id, client_secret, browser, eml_id, eml_secret, cornell_eml
@@ -448,7 +458,7 @@ if __name__ == "__main__":
     configuration = [
         config_file, category, keypoint_categories, SHARED_LINK_URL,
         unique_code, color, res_link, method, interpolation, res_path,
-        reference, distance_threshold, frame_rate, label_intervals
+        reference, distance_threshold, frame_rate, label_intervals, local
     ]
 
     annotator = KeyPointAnnotator(params, *configuration)

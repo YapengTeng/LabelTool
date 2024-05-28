@@ -76,7 +76,8 @@ class ImageNav:
                  res_label_path,
                  frame_rate=15,
                  params=None,
-                 label_intervals = False):
+                 label_intervals = False,
+                 local = None):
         #  unique_file="unique_code.json"):
 
         self.category = category    # Mannequin
@@ -88,6 +89,7 @@ class ImageNav:
         self.frame_rate = frame_rate
         self.unique_code = unique_code
         self.label_intervals = label_intervals
+        self.local = local
 
         self.repeated_number = None
 
@@ -214,8 +216,18 @@ class ImageNav:
         if id == None:
             _, _, id, pkl_name = self.all_pickles_files[self.current_file_index]
 
-        file_content = self.client.file(id).content()
-        file_content = io.BytesIO(file_content)
+        if self.local:
+            try:
+                file_path = os.path.join(self.local, pkl_name)
+                file_content = open(file_path, 'rb')
+            except FileNotFoundError:
+                print(f" '{file_path}' file doesn't find.")
+                import sys
+                sys.exit()
+        else:
+            file_content = self.client.file(id).content()
+            file_content = io.BytesIO(file_content)
+
         self.image_list = []
         # get the intervals
         if not self.label_intervals and self.intervals_file:
@@ -226,7 +238,6 @@ class ImageNav:
                 self.frame_rate = intervals_pkl['frame rate']
 
         count = self.frame_rate-1
-
 
         while True:
             try:
@@ -453,6 +464,11 @@ class ImageNav:
             if not k:
                 if self.current_json_data["keypoints"][self.category]:
                     last_key = list(self.current_json_data["keypoints"][self.category].keys())[-1]
+                    print(last_key)
+                    for index, value in enumerate(self.image_list):
+                        print(value[0])
+                        if value[0] == last_key:
+                            break
                     self.last_image_index = next(index for index, value in enumerate(self.image_list) if value[0] == last_key)
 
     # else:

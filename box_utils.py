@@ -15,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import shutil
 from urllib.parse import urlparse, parse_qs
 import toml
+import yaml
 
 
 def err(*message, **kwargs):
@@ -291,8 +292,13 @@ def generate_refresh_token(client_id,
 
 
 if __name__ == '__main__':
-    cornell_id = 'yt633@cornell.edu'
-    cornell_secret = 'xxxxx'
+
+    with open('config.yaml', 'r') as f:
+        config = yaml.safe_load(f)
+    
+    cornell_id = config['cloud']['eml_id']
+    cornell_secret = config['cloud']['eml_secret']
+
     browser = 'chrome'
 
     client_id = '8vojaaev2osqplchabnczmcmzyou83w0'
