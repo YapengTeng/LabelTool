@@ -415,6 +415,7 @@ if __name__ == "__main__":
     frame_rate = label_settings['frame_rate']
     distance_threshold = label_settings['distance_threshold']
     color = label_settings['color']
+    color = [tuple(c) for c in color]
 
     # get cloud settings
     eml_id = cloud_settings['eml_id']

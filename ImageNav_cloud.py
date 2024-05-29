@@ -464,11 +464,6 @@ class ImageNav:
             if not k:
                 if self.current_json_data["keypoints"][self.category]:
                     last_key = list(self.current_json_data["keypoints"][self.category].keys())[-1]
-                    print(last_key)
-                    for index, value in enumerate(self.image_list):
-                        print(value[0])
-                        if value[0] == last_key:
-                            break
                     self.last_image_index = next(index for index, value in enumerate(self.image_list) if value[0] == last_key)
 
     # else:
