@@ -25,7 +25,7 @@ labeling:
   
   method: linear    # interpolation parameter, when completing labeling, we will use it.
   interpolation: False
-  frame_rate: 1  # pls set the frame rate as asked
+  frame_rate: 10  # pls set the frame rate as asked
   distance_threshold: 10  # used for reference, if the distance between two points is less than this, we will refer it.
   color: 
     - [0, 255, 0]
